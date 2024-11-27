@@ -136,6 +136,13 @@ export const MENUITEMS = [
             title: "Finance Head Management",
           },
           {
+            path: `${process.env.PUBLIC_URL}/app/VisitType`,
+            type: "link",
+            active:false,
+            selected:false,
+            title: "Visit Type Management",
+          },
+          {
             path: `${process.env.PUBLIC_URL}/app/Privacy`,
             type: "link",
             active:false,
