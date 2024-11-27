@@ -5,6 +5,7 @@ import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import Auth from "./Authentication/auth";
 import "./index.scss";
 import Loader from "./shade/Loaders/Loaders"
+import CreateVisit from "./components/App/VisitType/CreateVisit.js";
 const App = React.lazy(() => import("../src/shade/layouts/App"));
 const Switcherapp = React.lazy(() => import("../src/shade/layouts/Switcherapp"));
 const Custompages = React.lazy(() => import("../src/shade/layouts/custompages"));
@@ -95,6 +96,9 @@ const CreateHelpAndSupport = React.lazy(() =>
 );
 const UpdateHelpAndSupport = React.lazy(() =>
   import("./components/App/HelpAndSupport/UpdateHelpAndSupport.js")
+);
+const VisitType = React.lazy(() =>
+  import("./components/App/VisitType/VisitType.js")
 );
 const CreatePrivacy = React.lazy(() =>
   import("./components/App/Privacy/CreatePrivacy.js")
@@ -378,23 +382,23 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.Fragment>
     <HashRouter>
-      <React.Suspense fallback={<Loader/>}>
+      <React.Suspense fallback={<Loader />}>
         <Routes>
           <Route path={`/`} element={<Auth />}>
             <Route index element={<AuthLogin />} />
-            
+
             <Route
               path={`${process.env.PUBLIC_URL}/authentication/login`}
               element={<AuthLogin />}
             />
-              <Route
+            <Route
               path={`${process.env.PUBLIC_URL}/authentication/signup`}
               element={<AuthSignup />}
             />
-            </Route>
-            
+          </Route>
+
           <Route path={`/`} element={<App />}>
-            
+
             <Route
               path={`${process.env.PUBLIC_URL}/widgets`}
               element={<Widgets />}
@@ -418,11 +422,11 @@ root.render(
                 path={`${process.env.PUBLIC_URL}/app/ABMManagement`}
                 element={<ABMManagement />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/ABMRegistration`}
                 element={<ABMRegistration />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/CreateABMManagement`}
                 element={<CreateABMManagement />}
               />
@@ -430,11 +434,11 @@ root.render(
                 path={`${process.env.PUBLIC_URL}/app/Zonal`}
                 element={<Zonal />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/ZonalHeadRegistration`}
                 element={<ZonalHeadRegistration />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/ZonalHeadprofileCreate`}
                 element={<ZonalHeadprofileCreate />}
               />
@@ -442,11 +446,11 @@ root.render(
                 path={`${process.env.PUBLIC_URL}/app/CreateTermsAndConditions`}
                 element={<CreateTermsAndConditions />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/TremsAndConditions`}
                 element={<TremsAndConditions />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/UpdateTermsAndConditions`}
                 element={<UpdateTermsAndConditions />}
               />
@@ -454,11 +458,11 @@ root.render(
                 path={`${process.env.PUBLIC_URL}/app/MHManagement`}
                 element={<MHManagement />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/MHProfileCreation`}
                 element={<MHProfileCreation />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/MHRegistration`}
                 element={<MHRegistration />}
               />
@@ -466,11 +470,11 @@ root.render(
                 path={`${process.env.PUBLIC_URL}/app/Finance`}
                 element={<Finance />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/FinanceHeadProfileCreate`}
                 element={<FinanceHeadProfileCreate />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/FinanceHeadRegistration`}
                 element={<FinanceHeadRegistration />}
               />
@@ -482,18 +486,18 @@ root.render(
                 path={`${process.env.PUBLIC_URL}/app/Stockist`}
                 element={<Stockist />}
               />              <Route
-              path={`${process.env.PUBLIC_URL}/app/AddStockist`}
-              element={<AddStockist />}
-            />
+                path={`${process.env.PUBLIC_URL}/app/AddStockist`}
+                element={<AddStockist />}
+              />
               <Route
                 path={`${process.env.PUBLIC_URL}/app/Products`}
                 element={<Products />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/AddProduct`}
                 element={<AddProduct />}
               />
-                                          <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/UpdateProduct`}
                 element={<UpdateProduct />}
               />
@@ -501,11 +505,11 @@ root.render(
                 path={`${process.env.PUBLIC_URL}/app/TBMRegistration`}
                 element={<TBMRegistration />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/TBMManagement`}
                 element={<TBMManagement />}
               />
-                                          <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/CreateTBMManagement`}
                 element={<CreateTBMManagement />}
               />
@@ -513,11 +517,11 @@ root.render(
                 path={`${process.env.PUBLIC_URL}/app/Clinical`}
                 element={<Clinical />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/ClinicalProfileCreate`}
                 element={<ClinicalProfileCreate />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/ClinicalRegistration`}
                 element={<ClinicalRegistration />}
               />
@@ -533,27 +537,35 @@ root.render(
                 path={`${process.env.PUBLIC_URL}/app/SalesProfileCreate`}
                 element={<SalesProfileCreate />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/CreateHelpAndSupport`}
                 element={<CreateHelpAndSupport />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/UpdateHelpAndSupport`}
                 element={<UpdateHelpAndSupport />}
               />
-                            <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/HelpAndSupport`}
                 element={<HelpAndSupport />}
               />
-                                          <Route
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/VisitType`}
+                element={<VisitType />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/CreateVisit`}
+                element={<CreateVisit />}
+              />
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/Privacy`}
                 element={<Privacy />}
               />
-                                          <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/CreatePrivacy`}
                 element={<CreatePrivacy />}
               />
-                                          <Route
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/UpdatePrivacy`}
                 element={<UpdatePrivacy />}
               />
@@ -991,7 +1003,7 @@ root.render(
             />
             <Route path="*" element={<Error404 />} />
           </Route>
-          
+
           <Route>
             <Route
               path={`${process.env.PUBLIC_URL}/pages/switcher/switcher-1`}
