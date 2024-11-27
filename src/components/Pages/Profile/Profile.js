@@ -690,7 +690,7 @@ const Profile = () =>{
                                               <img
                                                 alt=""
                                                 className="rounded-circle"
-                                                src={require("../../../assets/img/faces/6.jpg")}
+                                                src={require("../../../assets/img/faces/icon.webp")}
                                               />
                                             </div>
                                           </div>

@@ -65,7 +65,7 @@ const Stockist = () => {
         .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
             <tr key={item._id}>
-                <td>{item.stockist}</td>
+                <td><h5>{item.stockist}</h5></td>.
                 <td></td>
                 <td></td>
                 <td></td>

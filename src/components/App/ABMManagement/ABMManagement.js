@@ -49,6 +49,32 @@ const ABMManagement = () => {
         navigate(`${process.env.PUBLIC_URL}/app/ABMRegistration`, {});
     };
 
+    const deleteABM = (admin_id, abm_id) =>{
+        
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        
+        const raw = JSON.stringify({
+          "admin_id": admin_id,
+          "abm_id": abm_id
+        });
+        
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow"
+        };
+        
+        fetch(API_URL + "deleteABMUser", requestOptions)
+          .then((response) => response.json())
+          .then((result) =>{
+            console.log("deleteABMUser",result);
+            getabmUsers()
+          })
+          .catch((error) => console.error(error));
+    }
+
     const displayUsers = abmData
         .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
@@ -59,6 +85,7 @@ const ABMManagement = () => {
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
                 <td><img src={IMG_PATH + item.image} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
+                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteABM(item.admin_id,item._id)}>Delete</button></td>
             </tr>
         ));
 
@@ -88,6 +115,7 @@ const ABMManagement = () => {
                         <th>Address</th>
                         <th>Pincode</th>
                         <th>Image</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>

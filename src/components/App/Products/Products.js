@@ -94,7 +94,7 @@ const Products = () => {
         .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
             <tr key={item._id}>
-                <td>{item.productType}</td>
+                <td><h5>{item.productType}</h5></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -109,8 +109,8 @@ const Products = () => {
                 <td></td>
                 <td></td>
                 <td>
-                    <Button onClick={() => deleterecord(item._id)}>Delete</Button>
-                    <Button onClick={() => navup(item._id)} className="ms-3">Update</Button>
+                <Button onClick={() => navup(item._id)} className="ms-3">Update</Button>
+                <Button className="btn btn-danger btn" onClick={() => deleterecord(item._id)} style={{marginLeft: 7}}>Delete</Button>
                 </td>
             </tr>
         ));

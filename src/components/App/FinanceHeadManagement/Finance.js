@@ -48,6 +48,32 @@ const Finance = () => {
         navigate(`${process.env.PUBLIC_URL}/app/FinanceHeadRegistration`, {});
     };
 
+    const deleteFH = (admin_id, FH_id) =>{
+        
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        
+        const raw = JSON.stringify({
+          "admin_id": admin_id,
+          "FH_id": FH_id
+        });
+        
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow"
+        };
+        
+        fetch(API_URL + "deleteFHUser", requestOptions)
+          .then((response) => response.json())
+          .then((result) =>{
+            console.log("deleteFHUser",result);
+            getfinance()
+          })
+          .catch((error) => console.error(error));
+    }
+
     const displayUsers = financeData
         .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
@@ -58,6 +84,7 @@ const Finance = () => {
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
                 <td><img src={IMG_PATH + item.profile_img} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
+                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteFH(item.admin_id,item._id)}>Delete</button></td>
             </tr>
         ));
 
@@ -87,6 +114,7 @@ const Finance = () => {
                         <th>Address</th>
                         <th>Pincode</th>
                         <th>Image</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>

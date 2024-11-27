@@ -47,6 +47,31 @@ const TBMManagement = () => {
     const TBMRegistration = () => {
         navigate(`${process.env.PUBLIC_URL}/app/TBMRegistration`, {});
     };
+    const deleteTBM = (admin_id, tbm_id) =>{
+        
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        
+        const raw = JSON.stringify({
+          "admin_id": admin_id,
+          "tbm_id": tbm_id
+        });
+        
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow"
+        };
+        
+        fetch(API_URL + "deleteTBMUser", requestOptions)
+          .then((response) => response.json())
+          .then((result) =>{
+            console.log("deleteTBMUser",result);
+            getTbmUsers()
+          })
+          .catch((error) => console.error(error));
+    }
 
     const displayUsers = tbmData
         .slice(pagesVisited, pagesVisited + usersPerPage)
@@ -58,6 +83,7 @@ const TBMManagement = () => {
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
                 <td><img src={IMG_PATH + item.image} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
+                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteTBM(item.admin_id,item._id)}>Delete</button></td>
             </tr>
         ));
 
@@ -87,6 +113,7 @@ const TBMManagement = () => {
                         <th>Address</th>
                         <th>Pincode</th>
                         <th>Image</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>

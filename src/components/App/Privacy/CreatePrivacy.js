@@ -53,7 +53,7 @@ const CreatePrivacy = () => {
                         <Form.Label>Add Product</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Enter name"
+                            placeholder="Enter Privacy policy"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />

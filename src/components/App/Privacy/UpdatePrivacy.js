@@ -63,7 +63,7 @@ const UpdatePrivacy = () => {
                     <Form.Label>Update  Privacy Management</Form.Label>
                     <Form.Control
                         type="text"
-                        placeholder="Enter name"
+                        placeholder="Enter Privacy policy"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />

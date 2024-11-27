@@ -97,7 +97,7 @@ export default function Header() {
   })
   let navigate = useNavigate(); 
   const routeChange = () =>{ 
-    let path = `${process.env.PUBLIC_URL}/`; 
+    let path = `${process.env.PUBLIC_URL}/authentication/login`; 
     navigate(path);
   }
   return (
@@ -161,7 +161,7 @@ export default function Header() {
                   >
                     <img
                       alt=""
-                      src={require("../../assets/img/faces/2.jpg")}
+                      src={require("../../assets/img/icon.webp")}
                       className=""
                     />
                   </Dropdown.Toggle>
@@ -171,7 +171,7 @@ export default function Header() {
                         <div className="main-img-user">
                           <img
                             alt=""
-                            src={require("../../assets/img/faces/2.jpg")}
+                            src={require("../../assets/img/icon.webp")}
                             className=""
                           />
                         </div>

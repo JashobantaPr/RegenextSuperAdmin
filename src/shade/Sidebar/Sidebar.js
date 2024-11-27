@@ -212,7 +212,7 @@ const Sidebar = () => {
           style={{ position: "absolute" }}
         >
           <div className="main-sidebar-header active">
-            <NavLink className="header-logo active" to={`${process.env.PUBLIC_URL}/dashboard/dashboard-1`}>
+            <div className="header-logo active" >
               <img
                 src={require("../../assets/img/myimages/inside.png")}
                 className="main-logo  desktop-logo"
@@ -234,7 +234,7 @@ const Sidebar = () => {
                 className="main-logo  mobile-dark"
                 alt="logo"
               />
-            </NavLink>
+            </div>
           </div>
           <div className="main-sidemenu">
             <div className="slide-left disabled" id="slide-left">

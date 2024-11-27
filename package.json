@@ -1,7 +1,7 @@
 {
   "name": "nowa",
   "version": "0.1.0",
-  "homepage": "/superadmin",
+  "homepage": "/Superadmin",
   "private": true,
   "dependencies": {
     "@coreui/react": "^4.3.1",
@@ -36,6 +36,7 @@
     "react-bootstrap": "^2.5.0",
     "react-chartjs-2": "^4.3.1",
     "react-compare-image": "^3.1.0",
+    "react-confirm-alert": "^3.0.6",
     "react-countdown-now": "^2.1.2",
     "react-custom-scrollbars": "^4.2.1",
     "react-data-table-component": "^7.5.3",

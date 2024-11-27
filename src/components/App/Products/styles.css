@@ -46,3 +46,7 @@
     align-items: center;
   }
   
+  
+  .btn btn-danger btn btn-sm {
+    margin-left: 40;
+  }

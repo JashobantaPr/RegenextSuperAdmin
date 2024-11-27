@@ -38,6 +38,32 @@ const Sales = () => {
         navigate(`${process.env.PUBLIC_URL}/app/SalesHeadRegistration`, {});
     };
 
+    const deleteSH = (admin_id, SH_id) =>{
+        
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        
+        const raw = JSON.stringify({
+          "admin_id": admin_id,
+          "SH_id": SH_id
+        });
+        
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow"
+        };
+        
+        fetch(API_URL + "deleteSHUser", requestOptions)
+          .then((response) => response.json())
+          .then((result) =>{
+            console.log("deleteSHUser",result);
+            getSales()
+          })
+          .catch((error) => console.error(error));
+    }
+
     const displayUsers = SalesData
         .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
@@ -48,6 +74,7 @@ const Sales = () => {
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
                 <td><img src={IMG_PATH + item.profile_img} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
+                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteSH(item.admin_id,item._id)}>Delete</button></td>
             </tr>
         ));
 
@@ -77,6 +104,7 @@ const Sales = () => {
                         <th>Address</th>
                         <th>Pincode</th>
                         <th>Image</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
