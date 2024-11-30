@@ -4,7 +4,7 @@ import { Form, Button, Card, Modal, Alert } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../../../server";
 
-const CreateVisit = () => {
+const AddMarketingMaterial = () => {
     const [name, setName] = useState('');
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
     const personal = sessionStorage.getItem("personalid");
@@ -17,8 +17,8 @@ const CreateVisit = () => {
         myHeaders.append("Content-Type", "application/json");
         
         const raw = JSON.stringify({
-          
-          "visitType": name
+          "admin_id": personal,
+          "marketingMaterial": name
         });
         
         const requestOptions = {
@@ -27,7 +27,7 @@ const CreateVisit = () => {
           body: raw,
           redirect: "follow"
         };
-        fetch(API_URL+"addVisitType", requestOptions)
+        fetch(API_URL+"addMarketingMaterial", requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log("result is ",result);
@@ -43,7 +43,7 @@ const CreateVisit = () => {
 
     const handleCloseModal = () => {
         setShowModal(false);
-        navigate(`${process.env.PUBLIC_URL}/app/VisitType`);
+        navigate(`${process.env.PUBLIC_URL}/app/MarketingMaterial`);
     };
 
     return (
@@ -51,7 +51,7 @@ const CreateVisit = () => {
             <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px", width: "500px" }}>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="name">
-                        <Form.Label>Add VisitType</Form.Label>
+                        <Form.Label>Add MarketingMaterial</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Enter name"
@@ -70,7 +70,7 @@ const CreateVisit = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>VisitType Added Successfully</Modal.Body>
+                <Modal.Body>MarketingMaterial Added Successfully</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Close
@@ -88,4 +88,4 @@ const CreateVisit = () => {
     );
 };
 
-export default CreateVisit;
+export default AddMarketingMaterial;

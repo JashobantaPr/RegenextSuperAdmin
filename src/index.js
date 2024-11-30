@@ -6,6 +6,11 @@ import Auth from "./Authentication/auth";
 import "./index.scss";
 import Loader from "./shade/Loaders/Loaders"
 import CreateVisit from "./components/App/VisitType/CreateVisit.js";
+import { Inventory } from "@mui/icons-material";
+import MarketingMaterial from "./components/App/MarketingMaterial/MarketingMaterial.js";
+import UpdateVisit from "./components/App/VisitType/UpdateVisit.js";
+import AddMarketingMaterial from "./components/App/MarketingMaterial/AddMarketingMaterial.js";
+import UpdateMarketingMaterial from "./components/App/MarketingMaterial/UpdateMarketingMaterial.js";
 const App = React.lazy(() => import("../src/shade/layouts/App"));
 const Switcherapp = React.lazy(() => import("../src/shade/layouts/Switcherapp"));
 const Custompages = React.lazy(() => import("../src/shade/layouts/custompages"));
@@ -556,6 +561,26 @@ root.render(
               <Route
                 path={`${process.env.PUBLIC_URL}/app/CreateVisit`}
                 element={<CreateVisit />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/UpdateVisit`}
+                element={<UpdateVisit />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/Inventory`}
+                element={<Inventory />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/MarketingMaterial`}
+                element={<MarketingMaterial />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/AddMarketingMaterial`}
+                element={<AddMarketingMaterial />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/UpdateMarketingMaterial`}
+                element={<UpdateMarketingMaterial />}
               />
               <Route
                 path={`${process.env.PUBLIC_URL}/app/Privacy`}

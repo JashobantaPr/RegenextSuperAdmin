@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Alert, Button, Modal, Row } from "react-bootstrap"; // Import Modal
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import './VisitType.css'
+import './styles.css'
 import { API_URL, IMG_PATH } from "../../../server";
 
-const VisitType = () => {
+const MarketingMaterial = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [StockistData, setStockistData] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
@@ -27,12 +27,12 @@ const VisitType = () => {
             redirect: "follow"
         };
 
-        fetch(API_URL + "getAllVisitType", requestOptions)
+        fetch(API_URL + "getMarketingMaterial", requestOptions)
             .then((response) => response.json())
             .then((result) => {
                 if(result.status == true){
                     console.log("result is ", result);
-                    setStockistData(result.result);
+                    setStockistData(result.result1);
                     setAlertMessage(result.message);
                     // Clear the alert after 3 seconds
                     setTimeout(() => {
@@ -46,54 +46,27 @@ const VisitType = () => {
             .catch((error) => console.error(error));
     };
 
-    const CreateVisit = () => {
-        navigate(`${process.env.PUBLIC_URL}/app/CreateVisit`, {});
+    const AddMarketingMaterial = () => {
+        navigate(`${process.env.PUBLIC_URL}/app/AddMarketingMaterial`, {});
     };
 
     const navup = (idid) => {
-        navigate(`${process.env.PUBLIC_URL}/app/UpdateVisit`, {
+        navigate(`${process.env.PUBLIC_URL}/app/UpdateMarketingMaterial`, {
             state: idid
         })
     }
 
-    const deleterecord = (idid) => {
-        setRecordToDelete(idid); // Set the ID of the record to delete
-        setShowModal(true); // Show the confirmation modal
-    }
 
-    const deleteConfirmed = () => {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        const raw = JSON.stringify({
-            "visit_id": recordToDelete
-        });
-
-        const requestOptions = {
-            method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow"
-        };
-        fetch(API_URL + "deleteVisitType", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                getStockist();
-                console.log("result is", result)
-            })
-            .catch((error) => console.error(error));
-
-        setShowModal(false); // Hide the modal after deletion
-    }
 
     const handleCloseModal = () => {
         setShowModal(false); // Close the modal
     }
 
-    const displayUsers = StockistData?.slice(pagesVisited, pagesVisited + usersPerPage)
+    const displayUsers = StockistData
+        .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
             <tr key={item._id}>
-                <td><h5>{item.visitType}</h5></td>
+                <td><h5>{item.marketingMaterial}</h5></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -109,7 +82,6 @@ const VisitType = () => {
                 <td></td>
                 <td>
                 <Button onClick={() => navup(item._id)} className="ms-3">Update</Button>
-                <Button className="btn btn-danger btn" onClick={() => deleterecord(item._id)} style={{marginLeft: 7}}>Delete</Button>
                 </td>
             </tr>
         ));
@@ -125,10 +97,10 @@ const VisitType = () => {
             <div className="left-content mt-4">
                 <Button
                     style={{ marginLeft: "800px" }}
-                    onClick={CreateVisit}
+                    onClick={AddMarketingMaterial}
                     className="btn ripple btn-primary"
                 >
-                    <i className="fe fe-plus me-2">Add VisitType</i>
+                    <i className="fe fe-plus me-2">Add MarketingMaterial</i>
                 </Button>
             </div>
             <table className="table table-striped" style={{ marginTop: "30px" }}>
@@ -168,21 +140,8 @@ const VisitType = () => {
                 breakClassName={"page-item"} // Class for break elements (...)
                 breakLinkClassName={"page-link"}
             />
-            {/* Confirmation Modal */}
-            <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Confirmation</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Are you sure you want to delete the record?</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={deleteConfirmed}>
-                        Delete
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+           
+            
 
             <div>
           {/* Display alert if alertMessage is not empty */}
@@ -196,4 +155,4 @@ const VisitType = () => {
     );
 };
 
-export default VisitType;
+export default MarketingMaterial;
