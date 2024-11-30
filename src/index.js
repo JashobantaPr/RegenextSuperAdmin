@@ -6,11 +6,16 @@ import Auth from "./Authentication/auth";
 import "./index.scss";
 import Loader from "./shade/Loaders/Loaders"
 import CreateVisit from "./components/App/VisitType/CreateVisit.js";
-import { Inventory } from "@mui/icons-material";
 import MarketingMaterial from "./components/App/MarketingMaterial/MarketingMaterial.js";
 import UpdateVisit from "./components/App/VisitType/UpdateVisit.js";
 import AddMarketingMaterial from "./components/App/MarketingMaterial/AddMarketingMaterial.js";
 import UpdateMarketingMaterial from "./components/App/MarketingMaterial/UpdateMarketingMaterial.js";
+import GSTManagement from "./components/App/GSTManagement/GSTManagement.js";
+import AddGST from "./components/App/GSTManagement/AddGST.js";
+import UpdateGST from "./components/App/GSTManagement/UpdateGST.js";
+import Inventory from "./components/App/InventoryManagement/Inventory.js";
+import AddInventory from "./components/App/InventoryManagement/AddInventory.js";
+import UpdateInventory from "./components/App/InventoryManagement/UpdateInventory.js";
 const App = React.lazy(() => import("../src/shade/layouts/App"));
 const Switcherapp = React.lazy(() => import("../src/shade/layouts/Switcherapp"));
 const Custompages = React.lazy(() => import("../src/shade/layouts/custompages"));
@@ -571,6 +576,14 @@ root.render(
                 element={<Inventory />}
               />
               <Route
+                path={`${process.env.PUBLIC_URL}/app/AddInventory`}
+                element={<AddInventory />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/UpdateInventory`}
+                element={<UpdateInventory />}
+              />
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/MarketingMaterial`}
                 element={<MarketingMaterial />}
               />
@@ -593,6 +606,18 @@ root.render(
               <Route
                 path={`${process.env.PUBLIC_URL}/app/UpdatePrivacy`}
                 element={<UpdatePrivacy />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/GSTManagement`}
+                element={<GSTManagement />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/AddGST`}
+                element={<AddGST />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/UpdateGST`}
+                element={<UpdateGST />}
               />
             </Route>
             <Route>

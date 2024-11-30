@@ -136,6 +136,13 @@ export const MENUITEMS = [
             title: "Finance Head Management",
           },
           {
+            path: `${process.env.PUBLIC_URL}/app/GSTManagement`,
+            type: "link",
+            active:false,
+            selected:false,
+            title: "GST  Management",
+          },
+          {
             path: `${process.env.PUBLIC_URL}/app/VisitType`,
             type: "link",
             active:false,
