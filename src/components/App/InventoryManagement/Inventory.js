@@ -93,22 +93,22 @@ const Inventory = () => {
     const displayUsers = StockistData?.slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
             <tr key={item._id}>
-                <td><h5>{item.productType}</h5></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td><h6>{item.stockist}</h6></td>
+                <td><h6>{item.productType}</h6></td>
+                <td><h6>{item.openingStock.volume}</h6></td>
+                <td><h6>{item.openingStock.value}</h6></td>
+                <td><h6>{item.purchase.volume}</h6></td>
+                <td><h6>{item.purchase.value}</h6></td>
+                <td><h6>{item.sales.volume}</h6></td>
+                <td><h6>{item.sales.value}</h6></td>
+                <td><h6>{item.closingStock.volume}</h6></td>
+                <td><h6>{item.closingStock.value}</h6></td>
+                <td><h6>{item.categoryType}</h6></td>
+                <td style={{}}><h6>{item.date}</h6></td>
                 <td>
-                <Button onClick={() => navup(item._id)} className="ms-3">Update</Button>
+                <Button onClick={() => navup(item)} className="ms-3">Update</Button>
+                </td>
+                <td>
                 <Button className="btn btn-danger btn" onClick={() => deleterecord(item._id)} style={{marginLeft: 7}}>Delete</Button>
                 </td>
             </tr>
@@ -134,27 +134,43 @@ const Inventory = () => {
             <table className="table table-striped" style={{ marginTop: "30px" }}>
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th><h5>Stockist</h5></th>
+                        <th><h5>Product Type</h5></th>
+                        <th><h5>Opening Stock</h5></th>
                         <th></th>
+                        <th><h5>Purchase</h5></th>
                         <th></th>
+                        <th><h5>Sales</h5></th>
                         <th></th>
+                        <th><h5>Closing Stock</h5></th>
                         <th></th>
+                        <th><h5>Category Type</h5></th>
+                        <th><h5>Updated Date</h5></th>
                         <th></th>
+                        <th style={{marginLeft: "40px"}}>Action</th>
+                    </tr>
+                    <tr>
+                        <th><h5></h5></th>
+                        <th><h5></h5></th>
+                        <th><h6>Volume</h6></th>
+                        <th><h6>Value</h6></th>
+                        <th><h6>Volume</h6></th>
+                        <th><h6>Value</h6></th>
+                        <th><h6>Volume</h6></th>
+                        <th><h6>Value</h6></th>
+                        <th><h6>Volume</h6></th>
+                        <th><h6>Value</h6></th>
+                        <th><h5> </h5></th>
+                        <th><h5> </h5></th>
                         <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th style={{ marginLeft: "10px" }}>Action</th>
+                        <th ></th>
                     </tr>
                 </thead>
                 <tbody>
                     {displayUsers}
                 </tbody>
             </table>
+            
             <ReactPaginate
                 previousLabel={"<<"}
                 nextLabel={">>"}

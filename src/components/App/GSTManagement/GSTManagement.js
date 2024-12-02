@@ -11,6 +11,7 @@ const GSTManagement = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [recordToDelete, setRecordToDelete] = useState(null); // State to track record to delete
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
+    const personal = sessionStorage.getItem("personalid");
     const usersPerPage = 5;
     const pagesVisited = pageNumber * usersPerPage;
     const navigate = useNavigate();
@@ -66,7 +67,8 @@ const GSTManagement = () => {
         myHeaders.append("Content-Type", "application/json");
 
         const raw = JSON.stringify({
-            "id": recordToDelete
+            "admin_id":personal,
+            "gst_id": recordToDelete
         });
 
         const requestOptions = {
@@ -75,7 +77,7 @@ const GSTManagement = () => {
             body: raw,
             redirect: "follow"
         };
-        fetch(API_URL + "deleteGSTByBill", requestOptions)
+        fetch(API_URL + "deleteGST", requestOptions)
             .then((response) => response.json())
             .then((result) => {
                 getStockist();
