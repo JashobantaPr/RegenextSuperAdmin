@@ -141,7 +141,7 @@ const AddInventory = () => {
             <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px", width: "500px" }}>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="name">
-                    <Form.Label>Add Product Type</Form.Label>
+                    <Form.Label>Select Product Type</Form.Label>
                 <Form.Control
                     as="select"
                     value={ProductName}
@@ -154,7 +154,7 @@ const AddInventory = () => {
                         </option>
                     ))}
                 </Form.Control>
-                        <Form.Label>Add stockist</Form.Label>
+                        <Form.Label>Select stockist</Form.Label>
                         <Form.Control
           as="select"
           value={selectedStockist}
@@ -169,7 +169,7 @@ const AddInventory = () => {
             </option>
           ))}
         </Form.Control>
-                        <Form.Label>Add openingStock</Form.Label>
+                        <Form.Label>openingStock</Form.Label>
                         <Form.Control
                             type="Number"
                             placeholder="Enter Volume"
@@ -182,7 +182,7 @@ const AddInventory = () => {
                             value={OValue}
                             onChange={(e) => setOValue(e.target.value)}
                         />
-                        <Form.Label>Add purchase</Form.Label>
+                        <Form.Label>purchase</Form.Label>
                         <Form.Control
                             type="Number"
                             placeholder="Enter Volume"
@@ -195,7 +195,7 @@ const AddInventory = () => {
                             value={PValue}
                             onChange={(e) => setPValue(e.target.value)}
                         />
-                        <Form.Label>Add Sales</Form.Label>
+                        <Form.Label>Sales</Form.Label>
                         <Form.Control
                             type="Number"
                             placeholder="Enter Volume"
@@ -208,7 +208,7 @@ const AddInventory = () => {
                             value={SValue}
                             onChange={(e) => setSValue(e.target.value)}
                         />
-                        <Form.Label>Add closingStock</Form.Label>
+                        <Form.Label>closingStock</Form.Label>
                         <Form.Control
                             type="Number"
                             placeholder="Enter Volume"
@@ -221,7 +221,7 @@ const AddInventory = () => {
                             value={CValue}
                             onChange={(e) => setCValue(e.target.value)}
                         />
-                        <Form.Label>Add Date</Form.Label>
+                        <Form.Label>Date</Form.Label>
                         <Form.Control
                             type="Date"
                             placeholder="Select Date"

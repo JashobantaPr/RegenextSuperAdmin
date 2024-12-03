@@ -24,7 +24,7 @@ const UpdateInventory = () => {
     const [Cname, setCname] = useState('');
     const [date, setdate] = useState('');
     const [showModal, setShowModal] = useState(false);
-   
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -253,8 +253,8 @@ const UpdateInventory = () => {
                         style={{ width: 460 }}
                     >
                         <option value="active">Select (Active / Inactive)</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
                     </select>
 
                 </Form.Group>
