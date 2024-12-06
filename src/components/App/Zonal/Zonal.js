@@ -70,9 +70,9 @@ const Zonal = () => {
         .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
             <tr key={item._id}>
+                <td>{item.name}</td>
                 <td>{item.email}</td>
                 <td>{item.password}</td>
-                <td>{item.name}</td>
                 <td>{item.mobileNumber}</td>
                 <td>{item.phoneNumber}</td>
                 <td>{item.address}</td>
@@ -104,9 +104,9 @@ const Zonal = () => {
             <table className="table table-striped" style={{ marginTop: "30px" }}>
                 <thead>
                     <tr>
+                        <th>Name</th>
                         <th>Email</th>
                         <th>Password</th>
-                        <th>Name</th>
                         <th>Mobile Number</th>
                         <th>Phone Number</th>
                         <th>Address</th>
