@@ -1,7 +1,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
+import {HashRouter, Route, Routes } from "react-router-dom";
 import Auth from "./Authentication/auth";
 import "./index.scss";
 import Loader from "./shade/Loaders/Loaders"
@@ -16,6 +16,8 @@ import UpdateGST from "./components/App/GSTManagement/UpdateGST.js";
 import Inventory from "./components/App/InventoryManagement/Inventory.js";
 import AddInventory from "./components/App/InventoryManagement/AddInventory.js";
 import UpdateInventory from "./components/App/InventoryManagement/UpdateInventory.js";
+import AreaInfo from "./components/App/ABMManagement/AreaInfo.js";
+import ZHAreaInfo from "./components/App/Zonal/ZHAreaInfo.js";
 const App = React.lazy(() => import("../src/shade/layouts/App"));
 const Switcherapp = React.lazy(() => import("../src/shade/layouts/Switcherapp"));
 const Custompages = React.lazy(() => import("../src/shade/layouts/custompages"));
@@ -437,6 +439,10 @@ root.render(
                 element={<ABMRegistration />}
               />
               <Route
+                path={`${process.env.PUBLIC_URL}/app/AreaInfo`}
+                element={<AreaInfo />}
+              />
+              <Route
                 path={`${process.env.PUBLIC_URL}/app/CreateABMManagement`}
                 element={<CreateABMManagement />}
               />
@@ -447,6 +453,10 @@ root.render(
               <Route
                 path={`${process.env.PUBLIC_URL}/app/ZonalHeadRegistration`}
                 element={<ZonalHeadRegistration />}
+              />
+               <Route
+                path={`${process.env.PUBLIC_URL}/app/ZHAreaInfo`}
+                element={<ZHAreaInfo />}
               />
               <Route
                 path={`${process.env.PUBLIC_URL}/app/ZonalHeadprofileCreate`}

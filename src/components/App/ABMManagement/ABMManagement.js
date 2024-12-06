@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Row } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import './styles.css'
@@ -29,7 +29,7 @@ const ABMManagement = () => {
       fetch(API_URL+"getAllABM", requestOptions)
         .then((response) => response.json())
         .then((result) => {
-            if(result.status == true){
+            if(result.status === true){
                 console.log("result is ", result);
                 setAlertMessage(result.message);
                 setABMData(result.users);
@@ -48,6 +48,11 @@ const ABMManagement = () => {
     const ABMRegistration = () => {
         navigate(`${process.env.PUBLIC_URL}/app/ABMRegistration`, {});
     };
+    const navup = (idid) => {
+        navigate(`${process.env.PUBLIC_URL}/app/AreaInfo`, {
+            state: idid
+        })
+    }
 
     const deleteABM = (admin_id, abm_id) =>{
         
@@ -84,7 +89,9 @@ const ABMManagement = () => {
                 <td>{item.phoneNumber}</td>
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
+                <td>{item.areaInfo}</td>
                 <td><img src={IMG_PATH + item.image} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
+                <td><Button onClick={() => navup(item)} className="ms-3 btn-sm">AreaInfo</Button></td>
                 <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteABM(item.admin_id,item._id)}>Delete</button></td>
             </tr>
         ));
@@ -114,6 +121,7 @@ const ABMManagement = () => {
                         <th>Phone Number</th>
                         <th>Address</th>
                         <th>Pincode</th>
+                        <th>areaInfo</th>
                         <th>Image</th>
                         <th>Actions</th>
                     </tr>

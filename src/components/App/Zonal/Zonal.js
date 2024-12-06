@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Row } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import './styles.css'
@@ -34,6 +34,11 @@ const Zonal = () => {
     const ZonalRegistration = () => {
         navigate(`${process.env.PUBLIC_URL}/app/ZonalHeadRegistration`, {});
     };
+    const navup = (idid) => {
+        navigate(`${process.env.PUBLIC_URL}/app/ZHAreaInfo`, {
+            state: idid
+        })
+    }
 
     const deleteZH = (admin_id, zh_id) =>{
         
@@ -70,7 +75,9 @@ const Zonal = () => {
                 <td>{item.phoneNumber}</td>
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
+                <td>{item.areaInfo}</td>
                 <td><img src={IMG_PATH + item.image} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
+                <td><Button onClick={() => navup(item)} className="ms-3 btn-sm">AreaInfo</Button></td>
                 <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteZH(item.admin_id,item._id)}>Delete</button></td>
             </tr>
         ));
@@ -100,6 +107,7 @@ const Zonal = () => {
                         <th>Phone Number</th>
                         <th>Address</th>
                         <th>Pincode</th>
+                        <th>areaInfo</th>
                         <th>Image</th>
                         <th>Actions</th>
                     </tr>
