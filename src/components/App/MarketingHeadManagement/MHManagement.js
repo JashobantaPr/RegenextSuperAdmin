@@ -28,7 +28,7 @@ const MHManagement = () => {
         fetch(API_URL + "getAllMH", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if(result.status == true){
+                if (result.status == true) {
                     console.log("result is ", result);
                     setAlertMessage(result.message);
                     setmhData(result.users);
@@ -37,7 +37,7 @@ const MHManagement = () => {
                         setAlertMessage('');
                     }, 2000);
                 }
-                else{
+                else {
                     setAlertMessage('Error fetching data from the API');
                 }
             })
@@ -48,43 +48,45 @@ const MHManagement = () => {
         navigate(`${process.env.PUBLIC_URL}/app/MHRegistration`, {});
     };
 
-    const deleteMH = (admin_id, MH_id) =>{
-        
+    const deleteMH = (admin_id, MH_id) => {
+
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-        
+
         const raw = JSON.stringify({
-          "admin_id": admin_id,
-          "MH_id": MH_id
+            "admin_id": admin_id,
+            "MH_id": MH_id
         });
-        
+
         const requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: raw,
-          redirect: "follow"
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
         };
-        
+
         fetch(API_URL + "deleteMHUser", requestOptions)
-          .then((response) => response.json())
-          .then((result) =>{
-            console.log("deleteMHUser",result);
-            getmhUsers()
-          })
-          .catch((error) => console.error(error));
+            .then((response) => response.json())
+            .then((result) => {
+                console.log("deleteMHUser", result);
+                getmhUsers()
+            })
+            .catch((error) => console.error(error));
     }
 
     const displayUsers = mhData
         .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
             <tr key={item._id}>
+                <td>{item.email}</td>
+                <td>{item.password}</td>
                 <td>{item.name}</td>
                 <td>{item.mobileNumber}</td>
                 <td>{item.phoneNumber}</td>
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
                 <td><img src={IMG_PATH + item.profile_img} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
-                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteMH(item.admin_id,item._id)}>Delete</button></td>
+                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteMH(item.admin_id, item._id)}>Delete</button></td>
             </tr>
         ));
 
@@ -108,6 +110,8 @@ const MHManagement = () => {
             <table className="table table-striped" style={{ marginTop: "30px" }}>
                 <thead>
                     <tr>
+                        <th>Email</th>
+                        <th>Password</th>
                         <th>Name</th>
                         <th>Mobile Number</th>
                         <th>Phone Number</th>
@@ -122,27 +126,27 @@ const MHManagement = () => {
                 </tbody>
             </table>
             <ReactPaginate
-            previousLabel={"<<"}
-            nextLabel={">>"}
-            pageCount={pageCount}
-            onPageChange={changePage}
-            containerClassName={"pagination justify-content-center"} // Center pagination
-            previousLinkClassName={"page-link"}
-            nextLinkClassName={"page-link"}
-            disabledClassName={"page-item disabled"}
-            activeClassName={"page-item active"}
-            breakClassName={"page-item"} // Class for break elements (...)
-            breakLinkClassName={"page-link"}
-        />
+                previousLabel={"<<"}
+                nextLabel={">>"}
+                pageCount={pageCount}
+                onPageChange={changePage}
+                containerClassName={"pagination justify-content-center"} // Center pagination
+                previousLinkClassName={"page-link"}
+                nextLinkClassName={"page-link"}
+                disabledClassName={"page-item disabled"}
+                activeClassName={"page-item active"}
+                breakClassName={"page-item"} // Class for break elements (...)
+                breakLinkClassName={"page-link"}
+            />
 
-        <div>
-          {/* Display alert if alertMessage is not empty */}
-          {alertMessage && (
-            <div className="alert alert-success" role="alert">
-              {alertMessage}
+            <div>
+                {/* Display alert if alertMessage is not empty */}
+                {alertMessage && (
+                    <div className="alert alert-success" role="alert">
+                        {alertMessage}
+                    </div>
+                )}
             </div>
-          )}
-        </div>
         </div>
     );
 };

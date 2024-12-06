@@ -28,7 +28,7 @@ const Clinical = () => {
         fetch(API_URL + "getAllClinical", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if(result.status == true){
+                if (result.status == true) {
                     console.log("result is ", result);
                     setAlertMessage(result.message);
                     setclinicalData(result.users);
@@ -37,7 +37,7 @@ const Clinical = () => {
                         setAlertMessage('');
                     }, 2000);
                 }
-                else{
+                else {
                     setAlertMessage('Error fetching data from the API');
                 }
             })
@@ -48,41 +48,44 @@ const Clinical = () => {
         navigate(`${process.env.PUBLIC_URL}/app/ClinicalRegistration`, {});
     };
 
-const deleteClinical = (admin_id, CT_id) =>{
-        
+    const deleteClinical = (admin_id, CT_id) => {
+
         const myHeaders = new Headers();
-myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Content-Type", "application/json");
 
-const raw = JSON.stringify({
-  "admin_id": admin_id,
-  "CT_id": CT_id
-});
+        const raw = JSON.stringify({
+            "admin_id": admin_id,
+            "CT_id": CT_id
+        });
 
-const requestOptions = {
-  method: "POST",
-  headers: myHeaders,
-  body: raw,
-  redirect: "follow"
-};
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
+        };
 
-fetch(API_URL+"deleteCTUser", requestOptions)
-  .then((response) => response.text())
-  .then((result) =>{ console.log("deleteCTUser",result);
-    getclinical()
-})
-  .catch((error) => console.error(error));
-}
+        fetch(API_URL + "deleteCTUser", requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                console.log("deleteCTUser", result);
+                getclinical()
+            })
+            .catch((error) => console.error(error));
+    }
     const displayUsers = clinicalData
         .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
             <tr key={item._id}>
+                <td>{item.email}</td>
+                <td>{item.password}</td>
                 <td>{item.name}</td>
                 <td>{item.mobileNumber}</td>
                 <td>{item.phoneNumber}</td>
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
                 <td><img src={IMG_PATH + item.profile_img} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
-                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteClinical(item.admin_id,item._id)}>Delete</button></td>
+                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteClinical(item.admin_id, item._id)}>Delete</button></td>
             </tr>
         ));
 
@@ -106,6 +109,8 @@ fetch(API_URL+"deleteCTUser", requestOptions)
             <table className="table table-striped" style={{ marginTop: "30px" }}>
                 <thead>
                     <tr>
+                        <th>Email</th>
+                        <th>Password</th>
                         <th>Name</th>
                         <th>Mobile Number</th>
                         <th>Phone Number</th>
@@ -120,27 +125,27 @@ fetch(API_URL+"deleteCTUser", requestOptions)
                 </tbody>
             </table>
             <ReactPaginate
-            previousLabel={"<<"}
-            nextLabel={">>"}
-            pageCount={pageCount}
-            onPageChange={changePage}
-            containerClassName={"pagination justify-content-center"} // Center pagination
-            previousLinkClassName={"page-link"}
-            nextLinkClassName={"page-link"}
-            disabledClassName={"page-item disabled"}
-            activeClassName={"page-item active"}
-            breakClassName={"page-item"} // Class for break elements (...)
-            breakLinkClassName={"page-link"}
-        />
+                previousLabel={"<<"}
+                nextLabel={">>"}
+                pageCount={pageCount}
+                onPageChange={changePage}
+                containerClassName={"pagination justify-content-center"} // Center pagination
+                previousLinkClassName={"page-link"}
+                nextLinkClassName={"page-link"}
+                disabledClassName={"page-item disabled"}
+                activeClassName={"page-item active"}
+                breakClassName={"page-item"} // Class for break elements (...)
+                breakLinkClassName={"page-link"}
+            />
 
-        <div>
-          {/* Display alert if alertMessage is not empty */}
-          {alertMessage && (
-            <div className="alert alert-success" role="alert">
-              {alertMessage}
+            <div>
+                {/* Display alert if alertMessage is not empty */}
+                {alertMessage && (
+                    <div className="alert alert-success" role="alert">
+                        {alertMessage}
+                    </div>
+                )}
             </div>
-          )}
-        </div>
         </div>
     );
 };
