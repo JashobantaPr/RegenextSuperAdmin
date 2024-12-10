@@ -150,6 +150,13 @@ export const MENUITEMS = [
             title: "Visit Type Management",
           },
           {
+            path: `${process.env.PUBLIC_URL}/app/Target`,
+            type: "link",
+            active:false,
+            selected:false,
+            title: "Inventory Target Management",
+          },
+          {
             path: `${process.env.PUBLIC_URL}/app/Inventory`,
             type: "link",
             active:false,

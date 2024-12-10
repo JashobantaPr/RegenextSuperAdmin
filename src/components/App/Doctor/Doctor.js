@@ -8,6 +8,7 @@ const Doctor = () => {
   const [loading, setLoading] = useState(true);
   const [approvedDoctors, setApprovedDoctors] = useState([]);
   const [unapprovedDoctors, setUnapprovedDoctors] = useState([]);
+  const [recordToDelete, setRecordToDelete] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [approvedCurrentPage, setApprovedCurrentPage] = useState(1); // Separate state for approved doctors pagination
@@ -56,12 +57,43 @@ const Doctor = () => {
     fetch(API_URL + "adminApprove", requestOptions)
       .then((response) => response.json())
       .then((result) => {   
-        setShowModal(true);
         getDoctors();
         setSuccessMessage("Approval was successful");
       })
       .catch((error) => console.error(error));
   };
+
+  const deleterecord = (idid) => {
+    setRecordToDelete(idid); // Set the ID of the record to delete
+    setShowModal(true); // Show the confirmation modal
+}
+const deleteConfirmed = () => {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+      "doctor_id": recordToDelete
+  });
+
+  const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+  };
+  fetch(API_URL + "deleteDoctor", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+          getDoctors();
+          console.log("result is", result)
+      })
+      .catch((error) => console.error(error));
+
+  setShowModal(false); // Hide the modal after deletion
+}
+const handleCloseModal = () => {
+  setShowModal(false); // Close the modal
+}
 
   // Pagination for approved doctors
   const indexOfLastApprovedDoctor = approvedCurrentPage * doctorsPerPage;
@@ -108,6 +140,7 @@ const Doctor = () => {
                 <th>Mobile Number</th>
                 <th>Visit Type</th>
                 <th>Image</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -122,6 +155,8 @@ const Doctor = () => {
                   <td>{doctor.mobileNumber}</td>
                   <td>{doctor.visitType}</td>
                   <td><img src={IMG_PATH + doctor.image} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
+                  <td><Button className="btn btn-danger btn" onClick={() => deleterecord(doctor._id)} style={{marginLeft: 7}}>Delete</Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -167,6 +202,8 @@ const Doctor = () => {
                       Approve
                     </Button>
                   </td>
+                  <td><Button className="btn btn-danger btn" onClick={() => deleterecord(doctor._id)} style={{marginLeft: 7}}>Delete</Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -180,6 +217,20 @@ const Doctor = () => {
           </Pagination>
         </>
       )}
+      <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirmation</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete the record?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={deleteConfirmed}>
+                        Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
     </div>
   );
 };

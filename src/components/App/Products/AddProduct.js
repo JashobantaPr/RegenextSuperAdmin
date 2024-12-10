@@ -1,7 +1,6 @@
-import { formatDate } from "@fullcalendar/react";
 import React, { useState } from "react";
 import { Form, Button, Card, Modal, Alert } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../server";
 
 const AddProduct = () => {
@@ -70,7 +69,7 @@ const AddProduct = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Stockist Added Successfully</Modal.Body>
+                <Modal.Body>Product Added Successfully</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Close

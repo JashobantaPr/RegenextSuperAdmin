@@ -18,6 +18,8 @@ import AddInventory from "./components/App/InventoryManagement/AddInventory.js";
 import UpdateInventory from "./components/App/InventoryManagement/UpdateInventory.js";
 import AreaInfo from "./components/App/ABMManagement/AreaInfo.js";
 import ZHAreaInfo from "./components/App/Zonal/ZHAreaInfo.js";
+import AddTarget from "./components/App/InventoryTargetManagement/AddTarget.js";
+import UpdateTarget from "./components/App/InventoryTargetManagement/UpdateTarget.js";
 const App = React.lazy(() => import("../src/shade/layouts/App"));
 const Switcherapp = React.lazy(() => import("../src/shade/layouts/Switcherapp"));
 const Custompages = React.lazy(() => import("../src/shade/layouts/custompages"));
@@ -386,6 +388,8 @@ const DefaultTables = React.lazy(() =>
 const DataTables = React.lazy(() =>
   import("./components/Tables/DataTables/DataTables")
 );
+
+const Target = React.lazy(() => import("./components/App/InventoryTargetManagement/Target.js"));
 const AuthLogin = React.lazy(() => import("./Authentication/Login"));
 const AuthSignup = React.lazy(() => import("./Authentication/Signup"))
 //Form
@@ -481,6 +485,18 @@ root.render(
               <Route
                 path={`${process.env.PUBLIC_URL}/app/MHProfileCreation`}
                 element={<MHProfileCreation />}
+              />
+                           <Route
+                path={`${process.env.PUBLIC_URL}/app/Target`}
+                element={<Target />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/AddTarget`}
+                element={<AddTarget />}
+              />
+              <Route
+                path={`${process.env.PUBLIC_URL}/app/UpdateTarget`}
+                element={<UpdateTarget />}
               />
               <Route
                 path={`${process.env.PUBLIC_URL}/app/MHRegistration`}
