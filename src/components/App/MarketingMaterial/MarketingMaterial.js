@@ -5,11 +5,12 @@ import { API_URL, IMG_PATH } from "../../../server";
 
 const MarketingMaterial = () => {
     const [alertMessage, setAlertMessage] = useState('');
-    const [StockistData, setStockistData] = useState([]);
-    const [showModal, setShowModal] = useState(false); // State to control modal visibility
-    const [selectedImage, setSelectedImage] = useState(''); // State to store the selected image
+    const [stockistData, setStockistData] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState('');
     const navigate = useNavigate();
 
+    // Fetch marketing materials data on component mount
     useEffect(() => {
         getStockist();
     }, []);
@@ -19,48 +20,43 @@ const MarketingMaterial = () => {
         const requestOptions = {
             method: "POST",
             body: formdata,
-            redirect: "follow"
+            redirect: "follow",
         };
 
         fetch(API_URL + "getMarketingMaterial", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if(result.status === true){
-                    console.log("result is ", result);
+                if (result.status === true) {
                     setStockistData(result.result1);
                     setAlertMessage(result.message);
-                    // Clear the alert after 3 seconds
                     setTimeout(() => {
                         setAlertMessage('');
                     }, 2000);
-                }
-                else{
+                } else {
                     setAlertMessage('Error fetching data from the API');
                 }
             })
             .catch((error) => console.error(error));
     };
 
-    const AddMarketingMaterial = () => {
-        navigate(`${process.env.PUBLIC_URL}/app/AddMarketingMaterial`, {});
+    const handleAddMarketingMaterial = () => {
+        navigate(`${process.env.PUBLIC_URL}/app/AddMarketingMaterial`);
     };
 
-    const navup = (item) => {
+    const handleUpdateMarketingMaterial = (item) => {
         navigate(`${process.env.PUBLIC_URL}/app/UpdateMarketingMaterial`, {
-            state: item // Passing the full item object to the update screen
+            state: item, // Passing the full item object to the update screen
         });
     };
 
-    // Function to handle the image click
     const handleImageClick = (image) => {
-        setSelectedImage(image); // Set the selected image
-        setShowModal(true); // Show the modal
+        setSelectedImage(image);
+        setShowModal(true);
     };
 
-    // Function to handle closing the modal
     const handleCloseModal = () => {
-        setShowModal(false); // Close the modal
-        setSelectedImage(''); // Clear the selected image
+        setShowModal(false);
+        setSelectedImage('');
     };
 
     return (
@@ -68,12 +64,13 @@ const MarketingMaterial = () => {
             <div className="left-content mt-4">
                 <Button
                     style={{ marginLeft: "800px" }}
-                    onClick={AddMarketingMaterial}
+                    onClick={handleAddMarketingMaterial}
                     className="btn ripple btn-primary"
                 >
                     <i className="fe fe-plus me-2">Add Marketing Material</i>
                 </Button>
             </div>
+
             <Table striped style={{ marginTop: "30px" }}>
                 <thead>
                     <tr>
@@ -83,23 +80,25 @@ const MarketingMaterial = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {StockistData.map((item) => (
+                    {stockistData.map((item) => (
                         <tr key={item._id}>
                             <td><h5>{item.marketingMaterial}</h5></td>
                             <td>
                                 {item.image ? (
                                     <img
-                                        src={IMG_PATH + item.image} // Path for the image
+                                        src={IMG_PATH + item.image}
                                         alt={item.marketingMaterial}
                                         style={{ width: "50px", height: "50px", objectFit: "cover", cursor: 'pointer' }}
-                                        onClick={() => handleImageClick(item.image)} // Handle image click
+                                        onClick={() => handleImageClick(item.image)}
                                     />
                                 ) : (
                                     <p>No image available</p>
                                 )}
                             </td>
                             <td>
-                                <Button onClick={() => navup(item)} className="ms-3">Update</Button>
+                                <Button onClick={() => handleUpdateMarketingMaterial(item)} className="ms-3">
+                                    Update
+                                </Button>
                             </td>
                         </tr>
                     ))}
@@ -118,7 +117,7 @@ const MarketingMaterial = () => {
                 <Modal.Body>
                     <div style={{ position: "relative" }}>
                         <img
-                            src={IMG_PATH + selectedImage} // Path to the selected image
+                            src={IMG_PATH + selectedImage}
                             alt="Selected"
                             style={{ width: "100%", height: "auto" }}
                         />
@@ -130,7 +129,7 @@ const MarketingMaterial = () => {
                                 top: "10px",
                                 right: "10px",
                                 borderRadius: "50%",
-                                padding: "10px"
+                                padding: "10px",
                             }}
                         >
                             X

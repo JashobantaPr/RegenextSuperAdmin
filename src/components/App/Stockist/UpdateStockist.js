@@ -7,47 +7,40 @@ const UpdateStockist = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const stockistData = location.state?.stockistData || {}; // Ensure this is not undefined
-    const [stockist_id, setStockistID] = useState(stockistData._id || ""); // Ensure stockist_id is available
+    const stockistData = location.state?.stockistData || {}; // Ensure it's not undefined
+    const [stockistID, setStockistID] = useState(stockistData._id || "");
     const [name, setName] = useState(stockistData.stockist || "");
     const [contactNumber, setContactNumber] = useState(stockistData.contactNumber || ""); // Fixed typo
     const [address, setAddress] = useState(stockistData.address || "");
     const [status, setStatus] = useState(stockistData.stockistStatus || "Active");
-    const [showModal, setShowModal] = useState(false); // Initialize as boolean
-    const [alertMessage, setAlertMessage] = useState(""); // State for dynamic error messages
+    const [showModal, setShowModal] = useState(false); // Modal state
+    const [alertMessage, setAlertMessage] = useState(""); // Error message state
 
     useEffect(() => {
-        console.log("stockist_id initialized as:", stockist_id);
-    }, [stockist_id]);
+        console.log("Stockist ID initialized as:", stockistID);
+    }, [stockistID]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Log the form data before submitting
-        console.log("Form Data being submitted:", { stockist_id, name, contactNumber, address, status });
-
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        const raw = JSON.stringify({
-            stockist_id: stockist_id,
-            stockist: name,
-            contactNumber: contactNumber,
-            address: address,
-            stockistStatus: status,
-        });
+        // Log form data before submitting
+        console.log("Form Data being submitted:", { stockistID, name, contactNumber, address, status });
 
         const requestOptions = {
             method: "POST",
-            headers: myHeaders,
-            body: raw,
-            redirect: "follow",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                stockist_id: stockistID,
+                stockist: name,
+                contactNumber,
+                address,
+                stockistStatus: status,
+            }),
         };
 
         fetch(API_URL + "updateStockist", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                console.log(result);
                 if (result.status === true) {
                     setShowModal(true); // Show success modal
                 } else {
@@ -61,8 +54,8 @@ const UpdateStockist = () => {
     };
 
     const handleCloseModal = () => {
-        setShowModal(false); // Close the modal first
-        navigate(`${process.env.PUBLIC_URL}/app/Stockist`); // Navigate to the Stockist page
+        setShowModal(false); // Close modal
+        navigate(`${process.env.PUBLIC_URL}/app/Stockist`); // Navigate to Stockist page
     };
 
     return (

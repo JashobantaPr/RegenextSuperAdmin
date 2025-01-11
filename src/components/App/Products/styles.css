@@ -1,52 +1,67 @@
+/* Button Styling */
+.btn-danger {
+  padding: 5px 12px; /* Reduced padding */
+  font-size: 0.875rem; /* Reduced font size */
+  max-width: 100px; /* Limit the button width */
+  height: 30px; /* Set a fixed height */
+  margin-left: 5px; /* Adjust spacing between buttons */
+  border-radius: 4px; /* Optional: rounded corners */
+}
+
+/* Pagination Styling */
 .pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-  }
-  
-  .pagination li {
-    margin: 0 5px;
-  }
-  
-  .pagination li a {
-    display: block;
-    padding: 5px 10px;
-    color: #333;
-    border: 1px solid #ccc;
-    text-decoration: none;
-  }
-  
-  .pagination li.active a {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-  }
-  
-  .pagination li.disabled a {
-    pointer-events: none;
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li.disabled a:hover {
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li:first-child a::before,
-  .pagination li:last-child a::after {
-    content: '';
-  }
-  
-  .pagination li:first-child a,
-  .pagination li:last-child a {
-    display: flex;
-    align-items: center;
-  }
-  
-  
-  .btn btn-danger btn btn-sm {
-    margin-left: 40;
-  }
+display: flex;
+justify-content: center;
+list-style: none;
+}
+
+.pagination li {
+margin: 0 5px;
+}
+
+.pagination li a {
+display: block;
+padding: 5px 10px;
+color: #333;
+border: 1px solid #ccc;
+text-decoration: none;
+}
+
+.pagination li.active a {
+background-color: #007bff;
+color: #fff;
+border-color: #007bff;
+}
+
+.pagination li.disabled a {
+pointer-events: none;
+background-color: #eee;
+color: #aaa;
+border-color: #ccc;
+}
+
+.pagination li.disabled a:hover {
+background-color: #eee;
+color: #aaa;
+border-color: #ccc;
+}
+
+/* Remove extra styling for first/last children if necessary */
+.pagination li:first-child a::before,
+.pagination li:last-child a::after {
+content: '';
+}
+
+.pagination li:first-child a,
+.pagination li:last-child a {
+display: flex;
+align-items: center;
+}
+
+.btn-danger.btn-sm {
+margin-right: 70px; /* Adjust button spacing */
+padding: 3px 8px; /* Further reduced padding to make the button smaller */
+font-size: 0.75rem; /* Reduce font size more for a smaller button */
+max-width: 70px; /* Limit the button width */
+height: 30px; /* Set a fixed height for consistency */
+}

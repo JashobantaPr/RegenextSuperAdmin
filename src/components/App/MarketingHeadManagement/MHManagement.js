@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import './styles.css'
+import './styles.css';
 import { API_URL, IMG_PATH } from "../../../server";
 
 const MHManagement = () => {
@@ -13,6 +13,7 @@ const MHManagement = () => {
     const pagesVisited = pageNumber * usersPerPage;
     const navigate = useNavigate();
 
+    // Fetch data on component mount
     useEffect(() => {
         getmhUsers();
     }, []);
@@ -28,52 +29,41 @@ const MHManagement = () => {
         fetch(API_URL + "getAllMH", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if (result.status == true) {
-                    console.log("result is ", result);
+                if (result.status) {
                     setAlertMessage(result.message);
                     setmhData(result.users);
-                    // Clear the alert after 3 seconds
-                    setTimeout(() => {
-                        setAlertMessage('');
-                    }, 2000);
-                }
-                else {
+                    // Clear alert after 3 seconds
+                    setTimeout(() => setAlertMessage(''), 3000);
+                } else {
                     setAlertMessage('Error fetching data from the API');
                 }
             })
             .catch((error) => console.error(error));
     };
 
+    // Navigate to MH Registration page
     const mhRegistration = () => {
-        navigate(`${process.env.PUBLIC_URL}/app/MHRegistration`, {});
+        navigate(`${process.env.PUBLIC_URL}/app/MHRegistration`);
     };
 
+    // Delete Marketing Handler
     const deleteMH = (admin_id, MH_id) => {
-
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        const raw = JSON.stringify({
-            "admin_id": admin_id,
-            "MH_id": MH_id
-        });
-
         const requestOptions = {
             method: "POST",
-            headers: myHeaders,
-            body: raw,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ admin_id, MH_id }),
             redirect: "follow"
         };
 
         fetch(API_URL + "deleteMHUser", requestOptions)
             .then((response) => response.json())
-            .then((result) => {
-                console.log("deleteMHUser", result);
-                getmhUsers()
+            .then(() => {
+                getmhUsers();
             })
             .catch((error) => console.error(error));
-    }
+    };
 
+    // Display data in the table
     const displayUsers = mhData
         .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
@@ -85,29 +75,42 @@ const MHManagement = () => {
                 <td>{item.phoneNumber}</td>
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
-                <td><img src={IMG_PATH + item.profile_img} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
-                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteMH(item.admin_id, item._id)}>Delete</button></td>
+                <td>
+                    <img
+                        src={IMG_PATH + item.profile_img}
+                        alt="Profile"
+                        style={{ width: 30, height: 30, borderRadius: 5 }}
+                    />
+                </td>
+                <td>
+                    <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() => deleteMH(item.admin_id, item._id)}
+                    >
+                        Delete
+                    </Button>
+                </td>
             </tr>
         ));
 
+    // Pagination
     const pageCount = Math.ceil(mhData.length / usersPerPage);
-
     const changePage = ({ selected }) => {
         setPageNumber(selected);
     };
 
     return (
-        <div>
-            <div className="left-content mt-4">
-                <Button
-                    style={{ marginLeft: "750px" }}
-                    onClick={mhRegistration}
-                    className="btn ripple btn-primary"
-                >
+        <div className="container mt-4">
+            {/* Add Marketing Registration Button */}
+            <div className="d-flex justify-content-end mb-3">
+                <Button onClick={mhRegistration} className="btn btn-primary">
                     <i className="fe fe-plus me-2"></i>Marketing Registration
                 </Button>
             </div>
-            <table className="table table-striped" style={{ marginTop: "30px" }}>
+
+            {/* Data Table */}
+            <table className="table table-striped">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -121,32 +124,30 @@ const MHManagement = () => {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {displayUsers}
-                </tbody>
+                <tbody>{displayUsers}</tbody>
             </table>
+
+            {/* Pagination */}
             <ReactPaginate
                 previousLabel={"<<"}
                 nextLabel={">>"}
                 pageCount={pageCount}
                 onPageChange={changePage}
-                containerClassName={"pagination justify-content-center"} // Center pagination
-                previousLinkClassName={"page-link"}
-                nextLinkClassName={"page-link"}
-                disabledClassName={"page-item disabled"}
-                activeClassName={"page-item active"}
-                breakClassName={"page-item"} // Class for break elements (...)
-                breakLinkClassName={"page-link"}
+                containerClassName="pagination justify-content-center"
+                previousLinkClassName="page-link"
+                nextLinkClassName="page-link"
+                disabledClassName="page-item disabled"
+                activeClassName="page-item active"
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
             />
 
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
+            {/* Alert Message */}
+            {alertMessage && (
+                <Alert variant="success" dismissible>
+                    {alertMessage}
+                </Alert>
+            )}
         </div>
     );
 };

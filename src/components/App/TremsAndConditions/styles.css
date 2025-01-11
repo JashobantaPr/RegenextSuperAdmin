@@ -1,48 +1,55 @@
+/* Main pagination container */
 .pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-  }
-  
-  .pagination li {
-    margin: 0 5px;
-  }
-  
-  .pagination li a {
-    display: block;
-    padding: 5px 10px;
-    color: #333;
-    border: 1px solid #ccc;
-    text-decoration: none;
-  }
-  
-  .pagination li.active a {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-  }
-  
-  .pagination li.disabled a {
-    pointer-events: none;
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li.disabled a:hover {
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li:first-child a::before,
-  .pagination li:last-child a::after {
-    content: '';
-  }
-  
-  .pagination li:first-child a,
-  .pagination li:last-child a {
-    display: flex;
-    align-items: center;
-  }
-  
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
+
+/* Styling for each list item */
+.pagination li {
+  margin: 0 5px; /* Adds space between pagination items */
+}
+
+/* Link styles inside pagination items */
+.pagination li a {
+  display: block;
+  padding: 5px 10px;
+  color: #333;
+  border: 1px solid #ccc;
+  text-decoration: none;
+}
+
+/* Active page link styles */
+.pagination li.active a {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* Disabled page link styles */
+.pagination li.disabled a {
+  pointer-events: none;
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+/* Disabled page link hover styles (no change) */
+.pagination li.disabled a:hover {
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+/* Optional styles for first and last pages (currently not used) */
+.pagination li:first-child a::before,
+.pagination li:last-child a::after {
+  content: '';
+}
+
+/* Ensures first and last page links are styled properly */
+.pagination li:first-child a,
+.pagination li:last-child a {
+  display: flex;
+  align-items: center;
+}

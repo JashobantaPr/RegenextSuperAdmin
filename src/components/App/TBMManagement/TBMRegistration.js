@@ -10,62 +10,57 @@ function TBMRegistration() {
     const [password, setPassword] = useState("");
     const [alertMessage, setAlertMessage] = useState('');
     const [zonalHead, setZonalHead] = useState([]);
-    const [selectedZonalHead, setselectedZonalHead] = useState('');
+    const [selectedZonalHead, setSelectedZonalHead] = useState('');
     const [abm, setABM] = useState([]);
-    const [selectedABM, setselectedABM] = useState('');
+    const [selectedABM, setSelectedABM] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
 
     const personal = sessionStorage.getItem("personalid");
     console.log("personal id", personal);
 
-
     useEffect(() => {
         getZonalHead();
-    },[]);  
+        getABM();
+    }, []);
 
     const getZonalHead = () => {
         const requestOptions = {
             method: "POST",
             redirect: "follow"
-          };
-          
-          fetch(API_URL+"getAllZonal", requestOptions)
+        };
+
+        fetch(API_URL + "getAllZonal", requestOptions)
             .then((response) => response.json())
             .then((result) => {
                 console.log(result)
-                if(result.status == true){
-                    setZonalHead(result.users)
+                if (result.status === true) {
+                    setZonalHead(result.users);
                 }
             })
             .catch((error) => console.error(error));
+    };
 
-    }
-
-
-    useEffect(() =>{
-        getABM();
-    },[]);
-
-    const getABM = () =>{
+    const getABM = () => {
         const requestOptions = {
             method: "POST",
             redirect: "follow"
-          };
-          
-          fetch(API_URL+"getAllABM", requestOptions)
+        };
+
+        fetch(API_URL + "getAllABM", requestOptions)
             .then((response) => response.json())
             .then((result) => {
                 console.log(result)
-                if (result.status == true) {
-                    setABM(result.users)
+                if (result.status === true) {
+                    setABM(result.users);
                 }
             })
             .catch((error) => console.error(error));
-    }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -88,8 +83,7 @@ function TBMRegistration() {
         fetch(API_URL + "TBMRegistrationNew", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if (result.Status == true) {
-                    console.log("result is Tbm Registration ", result);
+                if (result.Status === true) {
                     setData(result);
                     setShowModal(true);
                 } else {
@@ -107,79 +101,87 @@ function TBMRegistration() {
 
     return (
         <div className="container mt-5">
-            <div className="card w-50 mx-auto">
+            <div className="card w-75 mx-auto shadow-sm">
                 <div className="card-body">
-                    <form>
-                        <h5 className="card-title">Email</h5>
-                        <div className="mb-3">
-                            <input type="email" className="form-control" placeholder="Enter Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <h4 className="card-title text-center mb-4">TBM Registration</h4>
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group mb-3">
+                            <label htmlFor="email" className="form-label">Email</label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                id="email"
+                                placeholder="Enter Email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
                         </div>
-                        <h5 className="card-title">Zonal Head</h5>
-                        <div className="mb-3">
-                           { /*<input type="" className="form-control" placeholder="Select Zonal Head" value={email} onChange={(e) => setEmail(e.target.value)} required />*/}
+
+                        <div className="form-group mb-3">
+                            <label htmlFor="zonalHead" className="form-label">Select Zonal Head</label>
                             <select
-          className="form-control"
-          value={selectedZonalHead}
-          onChange={(e)=>{
-            console.log('fgh', e.target.value)
-            setselectedZonalHead(e.target.value)
-        }}
-          required
-        >
-          <option value="" disabled>
-            Select Zonal Head
-          </option>
-          {zonalHead.map((zh) => (
-            <option key={zh._id} value={zh._id}>
-              {zh.name}
-            </option>
-          ))}
-        </select>
+                                id="zonalHead"
+                                className="form-control"
+                                value={selectedZonalHead}
+                                onChange={(e) => setSelectedZonalHead(e.target.value)}
+                                required
+                            >
+                                <option value="" disabled>Select Zonal Head</option>
+                                {zonalHead.map((zh) => (
+                                    <option key={zh._id} value={zh._id}>{zh.name}</option>
+                                ))}
+                            </select>
                         </div>
-                        <h5 className="card-title">ABM</h5>
-                        <div className="mb-3">
-                           { /*<input type="" className="form-control" placeholder="Select Zonal Head" value={email} onChange={(e) => setEmail(e.target.value)} required />*/}
+
+                        <div className="form-group mb-3">
+                            <label htmlFor="abm" className="form-label">Select ABM</label>
                             <select
-          className="form-control"
-          value={selectedABM}
-          onChange={(e)=>{
-            console.log('aasd', e.target.value)
-            setselectedABM(e.target.value)
-        }}
-          required
-        >
-          <option value="" disabled>
-            Select ABM
-          </option>
-          {abm.map((abm) => (
-            <option key={abm._id} value={abm._id}>
-              {abm.name}
-            </option>
-          ))}
-        </select>
+                                id="abm"
+                                className="form-control"
+                                value={selectedABM}
+                                onChange={(e) => setSelectedABM(e.target.value)}
+                                required
+                            >
+                                <option value="" disabled>Select ABM</option>
+                                {abm.map((abm) => (
+                                    <option key={abm._id} value={abm._id}>{abm.name}</option>
+                                ))}
+                            </select>
                         </div>
-                        <h5 className="card-title">Password</h5>
-                        <div className="mb-3">
-                            <input type="password" className="form-control" placeholder="Enter Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+
+                        <div className="form-group mb-3">
+                            <label htmlFor="password" className="form-label">Password</label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="password"
+                                placeholder="Enter Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
                         </div>
-                        <button onClick={(e) => handleSubmit(e)} type="submit" className="btn btn-primary">Submit</button>
+
+                        <div className="text-center mt-4">
+                            <button type="submit" className="btn btn-primary w-50">Submit</button>
+                        </div>
                     </form>
                 </div>
             </div>
 
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
+            {alertMessage && (
+                <div className="alert alert-warning mt-3 text-center" role="alert">
+                    {alertMessage}
+                </div>
+            )}
 
             {data && (
-                <Modal show={showModal} onHide={() => setShowModal(false)}>
-                    <Modal.Title style={{textAlign:"center",marginTop:"20px",marginBottom:"20px"}}>{data.message}</Modal.Title>
-                    <Modal.Footer>
+                <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                    <Modal.Body className="text-center">
+                        <h5>{data.message}</h5>
+                    </Modal.Body>
+                    <Modal.Footer className="justify-content-center">
                         <Button variant="secondary" onClick={() => { setShowModal(false); registration(); }}>
                             OK
                         </Button>

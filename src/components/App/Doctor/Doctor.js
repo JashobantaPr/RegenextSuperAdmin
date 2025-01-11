@@ -11,19 +11,19 @@ const Doctor = () => {
   const [recordToDelete, setRecordToDelete] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-  const [approvedCurrentPage, setApprovedCurrentPage] = useState(1); // Separate state for approved doctors pagination
-  const [unapprovedCurrentPage, setUnapprovedCurrentPage] = useState(1); // Separate state for unapproved doctors pagination
+  const [approvedCurrentPage, setApprovedCurrentPage] = useState(1); 
+  const [unapprovedCurrentPage, setUnapprovedCurrentPage] = useState(1); 
   const [doctorsPerPage] = useState(5);
   const navigate = useNavigate();
 
   useEffect(() => {
     getDoctors();
-  }, [approvedCurrentPage, unapprovedCurrentPage]); // Update doctors when currentPage changes
+  }, [approvedCurrentPage, unapprovedCurrentPage]); 
 
   const getDoctors = () => {
     const requestOptions = {
       method: "POST",
-      redirect: "follow"
+      redirect: "follow",
     };
 
     fetch(API_URL + "getAllDoctor", requestOptions)
@@ -39,75 +39,79 @@ const Doctor = () => {
       .catch((error) => console.error(error));
   };
 
-  const approve = (idid) => {
+  const approveDoctor = (idid) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     const raw = JSON.stringify({
-      doctor_id: idid
+      doctor_id: idid,
     });
 
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: "follow"
+      redirect: "follow",
     };
 
     fetch(API_URL + "adminApprove", requestOptions)
       .then((response) => response.json())
-      .then((result) => {   
+      .then((result) => {
         getDoctors();
         setSuccessMessage("Approval was successful");
       })
       .catch((error) => console.error(error));
   };
 
-  const deleterecord = (idid) => {
-    setRecordToDelete(idid); // Set the ID of the record to delete
-    setShowModal(true); // Show the confirmation modal
-}
-const deleteConfirmed = () => {
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
+  const deleteDoctor = (idid) => {
+    setRecordToDelete(idid);
+    setShowModal(true);
+  };
 
-  const raw = JSON.stringify({
-      "doctor_id": recordToDelete
-  });
+  const deleteConfirmed = () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-  const requestOptions = {
+    const raw = JSON.stringify({
+      doctor_id: recordToDelete,
+    });
+
+    const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: "follow"
-  };
-  fetch(API_URL + "deleteDoctor", requestOptions)
+      redirect: "follow",
+    };
+
+    fetch(API_URL + "deleteDoctor", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-          getDoctors();
-          console.log("result is", result)
+        getDoctors();
+        setShowModal(false); 
       })
       .catch((error) => console.error(error));
+  };
 
-  setShowModal(false); // Hide the modal after deletion
-}
-const handleCloseModal = () => {
-  setShowModal(false); // Close the modal
-}
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
-  // Pagination for approved doctors
-  const indexOfLastApprovedDoctor = approvedCurrentPage * doctorsPerPage;
-  const indexOfFirstApprovedDoctor = indexOfLastApprovedDoctor - doctorsPerPage;
-  const currentApprovedDoctors = approvedDoctors.slice(indexOfFirstApprovedDoctor, indexOfLastApprovedDoctor);
+  // Pagination logic
+  const paginateDoctors = (doctorsList, currentPage, setCurrentPage) => {
+    const indexOfLastDoctor = currentPage * doctorsPerPage;
+    const indexOfFirstDoctor = indexOfLastDoctor - doctorsPerPage;
+    const currentDoctors = doctorsList.slice(indexOfFirstDoctor, indexOfLastDoctor);
 
-  const paginateApproved = (pageNumber) => setApprovedCurrentPage(pageNumber);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Pagination for unapproved doctors
-  const indexOfLastUnapprovedDoctor = unapprovedCurrentPage * doctorsPerPage;
-  const indexOfFirstUnapprovedDoctor = indexOfLastUnapprovedDoctor - doctorsPerPage;
-  const currentUnapprovedDoctors = unapprovedDoctors.slice(indexOfFirstUnapprovedDoctor, indexOfLastUnapprovedDoctor);
+    return {
+      currentDoctors,
+      paginate,
+    };
+  };
 
-  const paginateUnapproved = (pageNumber) => setUnapprovedCurrentPage(pageNumber);
+  const { currentDoctors: currentApprovedDoctors, paginate: paginateApproved } = paginateDoctors(approvedDoctors, approvedCurrentPage, setApprovedCurrentPage);
+  const { currentDoctors: currentUnapprovedDoctors, paginate: paginateUnapproved } = paginateDoctors(unapprovedDoctors, unapprovedCurrentPage, setUnapprovedCurrentPage);
 
   return (
     <div>
@@ -115,18 +119,20 @@ const handleCloseModal = () => {
         <p>Loading...</p>
       ) : (
         <>
-          <Modal show={showModal} onHide={() => setShowModal(false)}>
+          {/* Success Modal */}
+          <Modal show={showModal} onHide={handleCloseModal}>
             <Modal.Header closeButton>
               <Modal.Title>Success</Modal.Title>
             </Modal.Header>
             <Modal.Body>{successMessage}</Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>
+              <Button variant="secondary" onClick={handleCloseModal}>
                 Close
               </Button>
             </Modal.Footer>
           </Modal>
 
+          {/* Approved Doctors Table */}
           <h3 style={{ marginTop: "40px", marginBottom: "20px", color: "#05EBD5" }}>Approved Doctors</h3>
           <Table bordered hover>
             <thead>
@@ -138,7 +144,7 @@ const handleCloseModal = () => {
                 <th>Address</th>
                 <th>Pincode</th>
                 <th>Mobile Number</th>
-                <th>Visit Type</th>
+                <th>Doctor Type</th>
                 <th>Image</th>
                 <th>Action</th>
               </tr>
@@ -153,14 +159,20 @@ const handleCloseModal = () => {
                   <td>{doctor.address}</td>
                   <td>{doctor.pincode}</td>
                   <td>{doctor.mobileNumber}</td>
-                  <td>{doctor.visitType}</td>
-                  <td><img src={IMG_PATH + doctor.image} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
-                  <td><Button className="btn btn-danger btn" onClick={() => deleterecord(doctor._id)} style={{marginLeft: 7}}>Delete</Button>
+                  <td>{doctor.doctorType}</td>
+                  <td>
+                    <img src={IMG_PATH + doctor.image} style={{ width: 30, height: 30, borderRadius: 5 }} alt="Doctor" />
+                  </td>
+                  <td>
+                    <Button className="btn btn-danger" onClick={() => deleteDoctor(doctor._id)}>
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </Table>
+
           <Pagination>
             {Array.from({ length: Math.ceil(approvedDoctors.length / doctorsPerPage) }, (_, i) => (
               <Pagination.Item key={i} active={i + 1 === approvedCurrentPage} onClick={() => paginateApproved(i + 1)}>
@@ -169,6 +181,7 @@ const handleCloseModal = () => {
             ))}
           </Pagination>
 
+          {/* Unapproved Doctors Table */}
           <h3 style={{ marginTop: "40px", marginBottom: "20px", color: "#05EBD5" }}>Unapproved Doctors</h3>
           <Table bordered hover>
             <thead>
@@ -180,7 +193,7 @@ const handleCloseModal = () => {
                 <th>Address</th>
                 <th>Pincode</th>
                 <th>Mobile Number</th>
-                <th>Visit Type</th>
+                <th>Doctor Type</th>
                 <th>Image</th>
                 <th>Actions</th>
               </tr>
@@ -195,19 +208,25 @@ const handleCloseModal = () => {
                   <td>{doctor.address}</td>
                   <td>{doctor.pincode}</td>
                   <td>{doctor.mobileNumber}</td>
-                  <td>{doctor.visitType}</td>
-                  <td><img src={IMG_PATH + doctor.image} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
+                  <td>{doctor.doctorType}</td>
                   <td>
-                    <Button onClick={() => approve(doctor._id)} style={{ backgroundColor: "#05EBD5", color: "#00000" }}>
+                    <img src={IMG_PATH + doctor.image} style={{ width: 30, height: 30, borderRadius: 5 }} alt="Doctor" />
+                  </td>
+                  <td>
+                    <Button onClick={() => approveDoctor(doctor._id)} style={{ backgroundColor: "#05EBD5", color: "#000" }}>
                       Approve
                     </Button>
                   </td>
-                  <td><Button className="btn btn-danger btn" onClick={() => deleterecord(doctor._id)} style={{marginLeft: 7}}>Delete</Button>
+                  <td>
+                    <Button className="btn btn-danger" onClick={() => deleteDoctor(doctor._id)}>
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </Table>
+
           <Pagination>
             {Array.from({ length: Math.ceil(unapprovedDoctors.length / doctorsPerPage) }, (_, i) => (
               <Pagination.Item key={i} active={i + 1 === unapprovedCurrentPage} onClick={() => paginateUnapproved(i + 1)}>
@@ -217,20 +236,22 @@ const handleCloseModal = () => {
           </Pagination>
         </>
       )}
+
+      {/* Delete Confirmation Modal */}
       <Modal show={showModal} onHide={handleCloseModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Confirmation</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Are you sure you want to delete the record?</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={deleteConfirmed}>
-                        Delete
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmation</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this record?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={deleteConfirmed}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

@@ -1,34 +1,55 @@
-import { formatDate } from "@fullcalendar/react";
-import React, { useState } from "react";
-import { Form, Button, Card, Modal} from "react-bootstrap";
+import { useState } from "react";
+import { Form, Button, Card, Modal } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../../../server";
 
 const FinanceHeadProfileCreate = () => {
     const [showModal, setShowModal] = useState(false);
-    const [data, setData] = useState(null);
     const [alertMessage, setAlertMessage] = useState('');
-    const [name, setName] = useState('');
-    const [mobileNumber, setMobileNumber] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [address, setAddress] = useState('');
-    const [pincode, setPincode] = useState('');
-    const [image, setImage] = useState(null); // Initialize image state as null
+    const [data, setData] = useState(null);
+
+    const [formFields, setFormFields] = useState({
+        name: '',
+        mobileNumber: '',
+        phoneNumber: '',
+        address: '',
+        pincode: '',
+        image: null
+    });
+
     const location = useLocation();
     const totaldata = location?.state;
     const navigate = useNavigate();
+
+    // Handle form field changes
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormFields((prevState) => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    // Handle image file change
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setFormFields((prevState) => ({
+            ...prevState,
+            image: file
+        }));
+    };
+
+    // Handle form submit
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const formData = new FormData();
         formData.append("admin_id", totaldata.user.admin_id);
         formData.append("user_id", totaldata.user._id);
-        formData.append("name", name);
-        formData.append("mobileNumber", mobileNumber);
-        formData.append("phoneNumber", phoneNumber);
-        formData.append("address", address);
-        formData.append("pincode", pincode);
-        formData.append("image", image); // Append the image file directly
+
+        Object.keys(formFields).forEach((key) => {
+            formData.append(key, formFields[key]);
+        });
 
         const requestOptions = {
             method: "POST",
@@ -40,95 +61,111 @@ const FinanceHeadProfileCreate = () => {
             .then((response) => response.json())
             .then((result) => {
                 if (result.Status === true) {
-                    console.log("result is", result)
                     setData(result);
                     setShowModal(true);
                 } else {
-                    setAlertMessage("Please Fill All The Fields");
+                    setAlertMessage("Please fill all the fields");
                 }
             })
             .catch((error) => console.error(error));
     };
 
-    const handleFileChange = (e) => {
-        // Update the image state when a file is selected
-        setImage(e.target.files[0]);
-    };
-
+    // Handle modal close and redirect
     const handleCloseModal = () => {
         setShowModal(false);
         navigate(`${process.env.PUBLIC_URL}/app/Finance`);
     };
 
     return (
-        <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px" }}>
+        <Card className="p-4" style={{ marginTop: "10px", marginLeft: "100px" }}>
             <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="name">
+                {/* Name Field */}
+                <Form.Group controlId="name">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                         type="text"
+                        name="name"
                         placeholder="Enter name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        value={formFields.name}
+                        onChange={handleInputChange}
                     />
                 </Form.Group>
+
+                {/* Mobile Number Field */}
                 <Form.Group controlId="mobileNumber">
                     <Form.Label>Mobile Number</Form.Label>
                     <Form.Control
                         type="text"
+                        name="mobileNumber"
                         placeholder="Enter mobile number"
-                        value={mobileNumber}
-                        onChange={(e) => setMobileNumber(e.target.value)}
+                        value={formFields.mobileNumber}
+                        onChange={handleInputChange}
                     />
                 </Form.Group>
+
+                {/* Phone Number Field */}
                 <Form.Group controlId="phoneNumber">
                     <Form.Label>Phone Number</Form.Label>
                     <Form.Control
                         type="text"
+                        name="phoneNumber"
                         placeholder="Enter phone number"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        value={formFields.phoneNumber}
+                        onChange={handleInputChange}
                     />
                 </Form.Group>
+
+                {/* Address Field */}
                 <Form.Group controlId="address">
                     <Form.Label>Address</Form.Label>
                     <Form.Control
                         type="text"
+                        name="address"
                         placeholder="Enter address"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
+                        value={formFields.address}
+                        onChange={handleInputChange}
                     />
                 </Form.Group>
+
+                {/* Pincode Field */}
                 <Form.Group controlId="pincode">
                     <Form.Label>Pincode</Form.Label>
                     <Form.Control
                         type="text"
+                        name="pincode"
                         placeholder="Enter pincode"
-                        value={pincode}
-                        onChange={(e) => setPincode(e.target.value)}
+                        value={formFields.pincode}
+                        onChange={handleInputChange}
                     />
                 </Form.Group>
+
+                {/* Image Upload Field */}
                 <Form.Group controlId="image">
                     <Form.Label>Image</Form.Label>
-                    <Form.Control type="file" onChange={handleFileChange} />
+                    <Form.Control
+                        type="file"
+                        onChange={handleFileChange}
+                    />
                 </Form.Group>
+
+                {/* Submit Button */}
                 <Button variant="primary mt-3" type="submit">
                     Submit
                 </Button>
             </Form>
 
-            {/* Display alert if alertMessage is not empty */}
+            {/* Alert Message */}
             {alertMessage && (
-                <div className="alert alert-success" role="alert" style={{ marginTop: "20px" }}>
+                <div className="alert alert-danger mt-3" role="alert">
                     {alertMessage}
                 </div>
             )}
 
-            {/* Modal */}
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Title style={{ textAlign: "center", marginTop: "20px", marginBottom: "20px" }}>
-                    {data ? data.message : ""}
-                </Modal.Title>
+            {/* Success Modal */}
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Body className="text-center">
+                    <h4>{data ? data.message : ''}</h4>
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         OK

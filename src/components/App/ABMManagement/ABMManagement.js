@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Table, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import './styles.css'
+import './styles.css'; // Ensure you have custom styles for your app
 import { API_URL, IMG_PATH } from "../../../server";
 
 const ABMManagement = () => {
@@ -30,15 +30,13 @@ const ABMManagement = () => {
             .then((response) => response.json())
             .then((result) => {
                 if (result.status === true) {
-                    console.log("result is ", result);
                     setAlertMessage(result.message);
                     setABMData(result.users);
                     // Clear the alert after 3 seconds
                     setTimeout(() => {
                         setAlertMessage('');
                     }, 2000);
-                }
-                else {
+                } else {
                     setAlertMessage('Error fetching data from the API');
                 }
             })
@@ -48,14 +46,14 @@ const ABMManagement = () => {
     const ABMRegistration = () => {
         navigate(`${process.env.PUBLIC_URL}/app/ABMRegistration`, {});
     };
+
     const navup = (idid) => {
         navigate(`${process.env.PUBLIC_URL}/app/AreaInfo`, {
             state: idid
-        })
-    }
+        });
+    };
 
     const deleteABM = (admin_id, abm_id) => {
-
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -74,11 +72,10 @@ const ABMManagement = () => {
         fetch(API_URL + "deleteABMUser", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                console.log("deleteABMUser", result);
-                getabmUsers()
+                getabmUsers();
             })
             .catch((error) => console.error(error));
-    }
+    };
 
     const displayUsers = abmData
         .slice(pagesVisited, pagesVisited + usersPerPage)
@@ -93,8 +90,12 @@ const ABMManagement = () => {
                 <td>{item.pincode}</td>
                 <td>{item.areaInfo}</td>
                 <td><img src={IMG_PATH + item.image} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
-                <td><Button onClick={() => navup(item)} className="ms-3 btn-sm">AreaInfo</Button></td>
-                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteABM(item.admin_id, item._id)}>Delete</button></td>
+                <td>
+                    <Button onClick={() => navup(item)} className="ms-3 btn-sm">Add Area Info</Button>
+                </td>
+                <td>
+                    <Button variant="danger" size="sm" onClick={() => deleteABM(item.admin_id, item._id)}>Delete</Button>
+                </td>
             </tr>
         ));
 
@@ -105,17 +106,23 @@ const ABMManagement = () => {
     };
 
     return (
-        <div>
-            <div className="left-content mt-4">
+        <div className="container mt-4">
+            <div className="d-flex justify-content-between mb-3">
                 <Button
-                    style={{ marginLeft: "800px" }}
                     onClick={ABMRegistration}
-                    className="btn ripple btn-primary"
+                    className="btn btn-primary"
                 >
                     <i className="fe fe-plus me-2"></i>ABM Registration
                 </Button>
             </div>
-            <table className="table table-striped" style={{ marginTop: "30px" }}>
+
+            {alertMessage && (
+                <Alert variant="success" className="alert-dismissible fade show mb-3">
+                    {alertMessage}
+                </Alert>
+            )}
+
+            <Table striped bordered hover responsive>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -125,37 +132,30 @@ const ABMManagement = () => {
                         <th>Phone Number</th>
                         <th>Address</th>
                         <th>Pincode</th>
-                        <th>areaInfo</th>
+                        <th>Area Info</th>
                         <th>Image</th>
                         <th>Actions</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     {displayUsers}
                 </tbody>
-            </table>
+            </Table>
+
             <ReactPaginate
                 previousLabel={"<<"}
                 nextLabel={">>"}
                 pageCount={pageCount}
                 onPageChange={changePage}
-                containerClassName={"pagination justify-content-center"} // Center pagination
+                containerClassName={"pagination justify-content-center mt-3"}
                 previousLinkClassName={"page-link"}
                 nextLinkClassName={"page-link"}
                 disabledClassName={"page-item disabled"}
                 activeClassName={"page-item active"}
-                breakClassName={"page-item"} // Class for break elements (...)
+                breakClassName={"page-item"}
                 breakLinkClassName={"page-link"}
             />
-
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
         </div>
     );
 };

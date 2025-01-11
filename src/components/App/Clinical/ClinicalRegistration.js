@@ -6,8 +6,8 @@ import { API_URL } from '../../../server';
 function ClinicalRegistration() {
     const [showModal, setShowModal] = useState(false);
     const [data, setData] = useState('');
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [alertMessage, setAlertMessage] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
@@ -37,7 +37,7 @@ function ClinicalRegistration() {
         fetch(API_URL + "clinicalRegistration", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if (result.Status == true) {
+                if (result.Status === true) {
                     console.log("result is clinicalRegistration", result);
                     setData(result);
                     setShowModal(true);
@@ -56,35 +56,53 @@ function ClinicalRegistration() {
 
     return (
         <div className="container mt-5">
-            <div className="card w-50 mx-auto">
+            <div className="card w-50 mx-auto shadow-sm">
                 <div className="card-body">
-                    <form>
-                        <h5 className="card-title">Email</h5>
+                    <h4 className="card-title text-center mb-4">Clinical Registration</h4>
+                    <form onSubmit={handleSubmit}>
                         <div className="mb-3">
-                            <input type="email" className="form-control" placeholder="Enter Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                            <label htmlFor="email" className="form-label">Email</label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                id="email"
+                                placeholder="Enter Email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
                         </div>
-                        <h5 className="card-title">Password</h5>
                         <div className="mb-3">
-                            <input type="password" className="form-control" placeholder="Enter Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                            <label htmlFor="password" className="form-label">Password</label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="password"
+                                placeholder="Enter Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
                         </div>
-                        <button onClick={(e) => handleSubmit(e)} type="submit" className="btn btn-primary">Submit</button>
+                        <Button variant="primary" type="submit" className="w-100">Submit</Button>
                     </form>
                 </div>
             </div>
 
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
+            {/* Alert message */}
+            {alertMessage && (
+                <Alert variant="danger" className="mt-3">
+                    {alertMessage}
+                </Alert>
+            )}
 
+            {/* Modal for success */}
             {data && (
-                <Modal show={showModal} onHide={() => setShowModal(false)}>
-                    <Modal.Title style={{textAlign:"center",marginTop:"20px",marginBottom:"20px"}}>{data.message}</Modal.Title>
-                    <Modal.Footer>
+                <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+                    <Modal.Header closeButton>
+                        <Modal.Title className="w-100 text-center">{data.message}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Footer className="justify-content-center">
                         <Button variant="secondary" onClick={() => { setShowModal(false); registration(); }}>
                             OK
                         </Button>

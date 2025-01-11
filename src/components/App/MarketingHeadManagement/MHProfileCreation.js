@@ -1,6 +1,5 @@
-import { formatDate } from "@fullcalendar/react";
 import React, { useState } from "react";
-import { Form, Button, Card, Modal} from "react-bootstrap";
+import { Form, Button, Card, Modal } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../../../server";
 
@@ -17,6 +16,7 @@ const ClinicalProfileCreate = () => {
     const location = useLocation();
     const totaldata = location?.state;
     const navigate = useNavigate();
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -40,7 +40,6 @@ const ClinicalProfileCreate = () => {
             .then((response) => response.json())
             .then((result) => {
                 if (result.Status === true) {
-                    console.log("result is", result)
                     setData(result);
                     setShowModal(true);
                 } else {
@@ -51,7 +50,6 @@ const ClinicalProfileCreate = () => {
     };
 
     const handleFileChange = (e) => {
-        // Update the image state when a file is selected
         setImage(e.target.files[0]);
     };
 
@@ -61,17 +59,19 @@ const ClinicalProfileCreate = () => {
     };
 
     return (
-        <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px" }}>
+        <Card className="mt-4 mx-auto p-4" style={{ maxWidth: "600px" }}>
             <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="name">
+                <Form.Group controlId="name">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                         type="text"
                         placeholder="Enter name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        required
                     />
                 </Form.Group>
+
                 <Form.Group controlId="mobileNumber">
                     <Form.Label>Mobile Number</Form.Label>
                     <Form.Control
@@ -79,8 +79,10 @@ const ClinicalProfileCreate = () => {
                         placeholder="Enter mobile number"
                         value={mobileNumber}
                         onChange={(e) => setMobileNumber(e.target.value)}
+                        required
                     />
                 </Form.Group>
+
                 <Form.Group controlId="phoneNumber">
                     <Form.Label>Phone Number</Form.Label>
                     <Form.Control
@@ -88,8 +90,10 @@ const ClinicalProfileCreate = () => {
                         placeholder="Enter phone number"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
+                        required
                     />
                 </Form.Group>
+
                 <Form.Group controlId="address">
                     <Form.Label>Address</Form.Label>
                     <Form.Control
@@ -97,8 +101,10 @@ const ClinicalProfileCreate = () => {
                         placeholder="Enter address"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
+                        required
                     />
                 </Form.Group>
+
                 <Form.Group controlId="pincode">
                     <Form.Label>Pincode</Form.Label>
                     <Form.Control
@@ -106,29 +112,30 @@ const ClinicalProfileCreate = () => {
                         placeholder="Enter pincode"
                         value={pincode}
                         onChange={(e) => setPincode(e.target.value)}
+                        required
                     />
                 </Form.Group>
+
                 <Form.Group controlId="image">
-                    <Form.Label>Image</Form.Label>
+                    <Form.Label>Profile Image</Form.Label>
                     <Form.Control type="file" onChange={handleFileChange} />
                 </Form.Group>
-                <Button variant="primary mt-3" type="submit">
+
+                <Button variant="primary" type="submit" className="mt-3">
                     Submit
                 </Button>
             </Form>
 
-            {/* Display alert if alertMessage is not empty */}
             {alertMessage && (
-                <div className="alert alert-success" role="alert" style={{ marginTop: "20px" }}>
+                <div className="alert alert-warning mt-3" role="alert">
                     {alertMessage}
                 </div>
             )}
 
-            {/* Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Title style={{ textAlign: "center", marginTop: "20px", marginBottom: "20px" }}>
-                    {data ? data.message : ""}
-                </Modal.Title>
+                <Modal.Header closeButton>
+                    <Modal.Title>{data ? data.message : "Success"}</Modal.Title>
+                </Modal.Header>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         OK

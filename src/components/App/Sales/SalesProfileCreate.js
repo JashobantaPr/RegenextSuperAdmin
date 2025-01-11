@@ -1,4 +1,3 @@
-import { formatDate } from "@fullcalendar/react";
 import React, { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -10,10 +9,12 @@ const SalesProfileCreate = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
     const [pincode, setPincode] = useState('');
-    const [image, setImage] = useState(''); // Initialize image state as null
+    const [image, setImage] = useState(null);
+    
     const location = useLocation();
     const totaldata = location?.state;
     const navigate = useNavigate();
+    
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -25,12 +26,7 @@ const SalesProfileCreate = () => {
         formData.append("phoneNumber", phoneNumber);
         formData.append("address", address);
         formData.append("pincode", pincode);
-        formData.append("image", image); // Append the image file directly
-        
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-        
+        formData.append("image", image);
 
         const requestOptions = {
             method: "POST",
@@ -38,22 +34,18 @@ const SalesProfileCreate = () => {
             redirect: "follow"
         };
 
-        fetch(API_URL+"salesProfileCreate", requestOptions)
+        fetch(API_URL + "salesProfileCreate", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                    console.log("result is",result)
-                    navigate(`${process.env.PUBLIC_URL}/app/Sales`)
+                console.log("Profile created:", result);
+                navigate(`${process.env.PUBLIC_URL}/app/Sales`);
             })
-            .catch((error) => console.error(error));
+            .catch((error) => console.error("Error creating profile:", error));
     };
 
     const handleFileChange = (e) => {
-        // Update the image state when a file is selected
         setImage(e.target.files[0]);
     };
-    const Home = () =>{
-       
-    }
 
     return (
         <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px" }}>
@@ -67,6 +59,7 @@ const SalesProfileCreate = () => {
                         onChange={(e) => setName(e.target.value)}
                     />
                 </Form.Group>
+                
                 <Form.Group controlId="mobileNumber">
                     <Form.Label>Mobile Number</Form.Label>
                     <Form.Control
@@ -76,6 +69,7 @@ const SalesProfileCreate = () => {
                         onChange={(e) => setMobileNumber(e.target.value)}
                     />
                 </Form.Group>
+                
                 <Form.Group controlId="phoneNumber">
                     <Form.Label>Phone Number</Form.Label>
                     <Form.Control
@@ -85,6 +79,7 @@ const SalesProfileCreate = () => {
                         onChange={(e) => setPhoneNumber(e.target.value)}
                     />
                 </Form.Group>
+                
                 <Form.Group controlId="address">
                     <Form.Label>Address</Form.Label>
                     <Form.Control
@@ -94,6 +89,7 @@ const SalesProfileCreate = () => {
                         onChange={(e) => setAddress(e.target.value)}
                     />
                 </Form.Group>
+                
                 <Form.Group controlId="pincode">
                     <Form.Label>Pincode</Form.Label>
                     <Form.Control
@@ -103,11 +99,16 @@ const SalesProfileCreate = () => {
                         onChange={(e) => setPincode(e.target.value)}
                     />
                 </Form.Group>
+                
                 <Form.Group controlId="image">
-                    <Form.Label>Image</Form.Label>
-                    <Form.Control type="file" onChange={handleFileChange} />
+                    <Form.Label>Upload Image</Form.Label>
+                    <Form.Control 
+                        type="file" 
+                        onChange={handleFileChange} 
+                    />
                 </Form.Group>
-                <Button  variant="primary mt-3" type="submit">
+
+                <Button variant="primary" type="submit" className="mt-3">
                     Submit
                 </Button>
             </Form>

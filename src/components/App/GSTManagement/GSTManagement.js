@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Modal, Row } from "react-bootstrap"; // Import Modal
+import { Alert, Button, Modal, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import './styles.css'
-import { API_URL, IMG_PATH } from "../../../server";
+import './styles.css';
+import { API_URL } from "../../../server";
 
 const GSTManagement = () => {
     const [alertMessage, setAlertMessage] = useState('');
-    const [StockistData, setStockistData] = useState([]);
+    const [stockistData, setStockistData] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
-    const [recordToDelete, setRecordToDelete] = useState(null); // State to track record to delete
-    const [showModal, setShowModal] = useState(false); // State to control modal visibility
+    const [recordToDelete, setRecordToDelete] = useState(null);
+    const [showModal, setShowModal] = useState(false);
     const personal = sessionStorage.getItem("personalid");
     const usersPerPage = 5;
     const pagesVisited = pageNumber * usersPerPage;
@@ -31,43 +31,36 @@ const GSTManagement = () => {
         fetch(API_URL + "getAllGST", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if(result.status == true){
-                    console.log("result is ", result);
+                if (result.status === true) {
                     setStockistData(result.users || []);
                     setAlertMessage(result.message);
-                    // Clear the alert after 3 seconds
-                    setTimeout(() => {
-                        setAlertMessage('');
-                    }, 2000);
-                }
-                else{
+                    setTimeout(() => setAlertMessage(''), 2000);
+                } else {
                     setAlertMessage('Error fetching data from the API');
                 }
             })
             .catch((error) => console.error(error));
     };
 
-    const AddGST = () => {
-        navigate(`${process.env.PUBLIC_URL}/app/AddGST`, {});
+    const handleAddGST = () => {
+        navigate(`${process.env.PUBLIC_URL}/app/AddGST`);
     };
 
-    const navup = (idid) => {
-        navigate(`${process.env.PUBLIC_URL}/app/UpdateGST`, {
-            state: idid
-        })
-    }
+    const handleUpdateGST = (id) => {
+        navigate(`${process.env.PUBLIC_URL}/app/UpdateGST`, { state: id });
+    };
 
-    const deleterecord = (idid) => {
-        setRecordToDelete(idid); // Set the ID of the record to delete
-        setShowModal(true); // Show the confirmation modal
-    }
+    const handleDeleteRecord = (id) => {
+        setRecordToDelete(id);
+        setShowModal(true);
+    };
 
-    const deleteConfirmed = () => {
+    const handleDeleteConfirmed = () => {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
         const raw = JSON.stringify({
-            "admin_id":personal,
+            "admin_id": personal,
             "gst_id": recordToDelete
         });
 
@@ -77,48 +70,42 @@ const GSTManagement = () => {
             body: raw,
             redirect: "follow"
         };
+
         fetch(API_URL + "deleteGST", requestOptions)
             .then((response) => response.json())
             .then((result) => {
                 getStockist();
-                console.log("result is", result)
+                console.log("result is", result);
             })
             .catch((error) => console.error(error));
 
-        setShowModal(false); // Hide the modal after deletion
-    }
+        setShowModal(false);
+    };
 
     const handleCloseModal = () => {
-        setShowModal(false); // Close the modal
-    }
+        setShowModal(false);
+    };
 
-    const displayUsers = StockistData?.slice(pagesVisited, pagesVisited + usersPerPage)
-        .map((item) => (
-            <tr key={item._id}>
-                <td><h5>{item.gstRate}</h5></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                <Button onClick={() => navup(item._id)} className="ms-3">Update</Button>
-                <Button className="btn btn-danger btn" onClick={() => deleterecord(item._id)} style={{marginLeft: 7}}>Delete</Button>
-                </td>
-            </tr>
-        ));
+    const displayedStockists = stockistData.slice(pagesVisited, pagesVisited + usersPerPage).map((item) => (
+        <tr key={item._id}>
+            <td><h5>{item.gstRate}</h5></td>
+            <td>
+                <Button onClick={() => handleUpdateGST(item._id)} className="ms-3">
+                    Update
+                </Button>
+                <Button
+                    className="btn btn-danger ms-2"
+                    onClick={() => handleDeleteRecord(item._id)}
+                >
+                    Delete
+                </Button>
+            </td>
+        </tr>
+    ));
 
-    const pageCount = Math.ceil(StockistData.length / usersPerPage);
+    const pageCount = Math.ceil(stockistData.length / usersPerPage);
 
-    const changePage = ({ selected }) => {
+    const handlePageChange = ({ selected }) => {
         setPageNumber(selected);
     };
 
@@ -127,49 +114,39 @@ const GSTManagement = () => {
             <div className="left-content mt-4">
                 <Button
                     style={{ marginLeft: "800px" }}
-                    onClick={AddGST}
+                    onClick={handleAddGST}
                     className="btn ripple btn-primary"
                 >
                     <i className="fe fe-plus me-2"></i>Add GST
                 </Button>
             </div>
-            <table className="table table-striped" style={{ marginTop: "30px" }}>
+
+            <table className="table table-striped mt-3">
                 <thead>
                     <tr>
                         <th>GST Rate</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th style={{ marginLeft: "10px" }}>Action</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {displayUsers}
+                    {displayedStockists}
                 </tbody>
             </table>
+
             <ReactPaginate
                 previousLabel={"<<"}
                 nextLabel={">>"}
                 pageCount={pageCount}
-                onPageChange={changePage}
-                containerClassName={"pagination justify-content-center"} // Center pagination
+                onPageChange={handlePageChange}
+                containerClassName={"pagination justify-content-center"}
                 previousLinkClassName={"page-link"}
                 nextLinkClassName={"page-link"}
                 disabledClassName={"page-item disabled"}
                 activeClassName={"page-item active"}
-                breakClassName={"page-item"} // Class for break elements (...)
+                breakClassName={"page-item"}
                 breakLinkClassName={"page-link"}
             />
+
             {/* Confirmation Modal */}
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
@@ -180,20 +157,18 @@ const GSTManagement = () => {
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Cancel
                     </Button>
-                    <Button variant="primary" onClick={deleteConfirmed}>
+                    <Button variant="primary" onClick={handleDeleteConfirmed}>
                         Delete
                     </Button>
                 </Modal.Footer>
             </Modal>
 
-            <div>
-          {/* Display alert if alertMessage is not empty */}
-          {alertMessage && (
-            <div className="alert alert-success" role="alert">
-              {alertMessage}
-            </div>
-          )}
-        </div>
+            {/* Display alert if alertMessage is not empty */}
+            {alertMessage && (
+                <div className="alert alert-success" role="alert">
+                    {alertMessage}
+                </div>
+            )}
         </div>
     );
 };

@@ -1,48 +1,63 @@
 .pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-  }
-  
-  .pagination li {
-    margin: 0 5px;
-  }
-  
-  .pagination li a {
-    display: block;
-    padding: 5px 10px;
-    color: #333;
-    border: 1px solid #ccc;
-    text-decoration: none;
-  }
-  
-  .pagination li.active a {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-  }
-  
-  .pagination li.disabled a {
-    pointer-events: none;
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li.disabled a:hover {
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li:first-child a::before,
-  .pagination li:last-child a::after {
-    content: '';
-  }
-  
-  .pagination li:first-child a,
-  .pagination li:last-child a {
-    display: flex;
-    align-items: center;
-  }
-  
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination li a {
+  display: block;
+  padding: 5px 10px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Rounded borders */
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover transitions */
+}
+
+.pagination li.active a {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pagination li.disabled a {
+  pointer-events: none;
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+.pagination li.disabled a:hover {
+  background-color: #eee; /* Ensure no hover effect on disabled */
+  color: #aaa;
+  border-color: #ccc;
+}
+
+.pagination li a:hover {
+  background-color: #f1f1f1;
+  color: #007bff; /* Light hover effect */
+}
+
+.pagination li:first-child a::before,
+.pagination li:last-child a::after {
+  content: '';
+}
+
+.pagination li:first-child a,
+.pagination li:last-child a {
+  display: flex;
+  align-items: center;
+}
+
+/* Add a hover effect on first and last buttons (e.g., next, previous) */
+.pagination li:first-child a:hover,
+.pagination li:last-child a:hover {
+  background-color: #f8f9fa;
+  color: #007bff;
+}

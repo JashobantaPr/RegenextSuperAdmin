@@ -1,48 +1,61 @@
 .pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-  }
-  
-  .pagination li {
-    margin: 0 5px;
-  }
-  
-  .pagination li a {
-    display: block;
-    padding: 5px 10px;
-    color: #333;
-    border: 1px solid #ccc;
-    text-decoration: none;
-  }
-  
-  .pagination li.active a {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-  }
-  
-  .pagination li.disabled a {
-    pointer-events: none;
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li.disabled a:hover {
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li:first-child a::before,
-  .pagination li:last-child a::after {
-    content: '';
-  }
-  
-  .pagination li:first-child a,
-  .pagination li:last-child a {
-    display: flex;
-    align-items: center;
-  }
-  
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination li a {
+  display: block;
+  padding: 5px 10px;
+  color: #333;
+  border: 1px solid #ccc;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.pagination li.active a {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pagination li.disabled a {
+  pointer-events: none;
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+.pagination li.disabled a:hover {
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+.pagination li:first-child a::before,
+.pagination li:last-child a::after {
+  content: '';
+}
+
+.pagination li:first-child a,
+.pagination li:last-child a {
+  display: flex;
+  align-items: center;
+}
+
+.pagination li:not(.disabled) a:hover {
+  background-color: #f1f1f1;
+  border-color: #bbb;
+}
+.btn-primary{
+  padding: 7px 15px;  /* Adjust padding for smaller button */
+  font-size: 12px;     /* Reduce font size */
+  width: auto;         /* Allow the button width to shrink based on content */
+  max-width: 200px; 
+}

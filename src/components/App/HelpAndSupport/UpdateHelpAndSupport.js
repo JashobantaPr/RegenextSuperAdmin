@@ -9,9 +9,8 @@ const UpdateHelpAndSupport = () => {
     const [showModal, setShowModal] = useState(false);
     const location = useLocation();
     const iddata = location?.state;
-    console.log("iddata is", iddata);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         if (showModal) {
             setAlertMessage('');
@@ -20,47 +19,46 @@ const UpdateHelpAndSupport = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        updateProduct(); 
+        updateProduct();
     };
 
     const updateProduct = () => {
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      
-      const raw = JSON.stringify({
-        "HelpAndSupport_id": iddata,
-        "HelpAndSupport": name
-      });
-      
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow"
-      };
-        fetch(API_URL+"updateHelpAndSupport", requestOptions)
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = JSON.stringify({
+            "HelpAndSupport_id": iddata,
+            "HelpAndSupport": name
+        });
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
+        };
+
+        fetch(API_URL + "updateHelpAndSupport", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if(result.Status == true){
-                    console.log("result is ", result);
-                   setShowModal(true);      
-                }  
-                else{
-                    setAlertMessage("Please Fill All The Fields");
+                if (result.Status === true) {
+                    setShowModal(true);      
+                } else {
+                    setAlertMessage("Please fill in all the fields");
                 }       
             })
             .catch((error) => console.error(error));
     };
-   
-   const navigateToProducts = () => {
-       navigate(`${process.env.PUBLIC_URL}/app/HelpAndSupport`);
-   };
+
+    const navigateToProducts = () => {
+        navigate(`${process.env.PUBLIC_URL}/app/HelpAndSupport`);
+    };
 
     return (
-        <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px", width: "500px" }}>
+        <Card style={{ marginTop: "30px", padding: "20px", width: "500px", marginLeft: "auto", marginRight: "auto" }}>
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="name">
-                    <Form.Label>Update  UpdateHelpAndSupport</Form.Label>
+                    <Form.Label>Update Help and Support</Form.Label>
                     <Form.Control
                         type="text"
                         placeholder="Enter name"
@@ -68,16 +66,17 @@ const UpdateHelpAndSupport = () => {
                         onChange={(e) => setName(e.target.value)}
                     />
                 </Form.Group>
-                <Button variant="primary mt-3" type="submit">
+                <Button variant="primary" type="submit" className="mt-3">
                     Submit
                 </Button>
             </Form>
+
             {/* Modal for success message */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>UpdateHelpAndSupport updated successfully!</Modal.Body>
+                <Modal.Body>Help and Support has been updated successfully!</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={navigateToProducts}>
                         Close
@@ -85,14 +84,12 @@ const UpdateHelpAndSupport = () => {
                 </Modal.Footer>
             </Modal>
 
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success mt-3" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
+            {/* Alert Message */}
+            {alertMessage && (
+                <div className="alert alert-danger mt-3" role="alert">
+                    {alertMessage}
+                </div>
+            )}
         </Card>
     );
 };

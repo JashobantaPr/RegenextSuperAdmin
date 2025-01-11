@@ -9,9 +9,8 @@ const UpdatePrivacy = () => {
     const [showModal, setShowModal] = useState(false);
     const location = useLocation();
     const iddata = location?.state;
-    console.log("iddata is", iddata);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         if (showModal) {
             setAlertMessage('');
@@ -24,55 +23,57 @@ const UpdatePrivacy = () => {
     };
 
     const updateProduct = () => {
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      
-      const raw = JSON.stringify({
-        "privacy_id": iddata,
-        "privacy": name
-      });
-      
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow"
-      };
-        fetch(API_URL+"updateprivacy", requestOptions)
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = JSON.stringify({
+            "privacy_id": iddata,
+            "privacy": name
+        });
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
+        };
+
+        fetch(API_URL + "updateprivacy", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if(result.Status == true){
-                    console.log("result is ", result);
-                   setShowModal(true);      
-                }  
-                else{
-                    setAlertMessage("Please Fill All The Fields");
-                }       
+                if (result.Status === true) {
+                    setShowModal(true); // Show success modal
+                } else {
+                    setAlertMessage("Please fill all the fields");
+                }
             })
             .catch((error) => console.error(error));
     };
-   
-   const navigateToProducts = () => {
-       navigate(`${process.env.PUBLIC_URL}/app/Privacy`);
-   };
+
+    const navigateToProducts = () => {
+        navigate(`${process.env.PUBLIC_URL}/app/Privacy`);
+    };
 
     return (
-        <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px", width: "500px" }}>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="name">
-                    <Form.Label>Update  Privacy Management</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter Privacy policy"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </Form.Group>
-                <Button variant="primary mt-3" type="submit">
-                    Submit
-                </Button>
-            </Form>
-            {/* Modal for success message */}
+        <div className="container mt-4">
+            <Card className="form-container">
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group controlId="name">
+                        <Form.Label>Update Privacy Management</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter Privacy Policy"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Button variant="primary mt-3" type="submit">
+                        Submit
+                    </Button>
+                </Form>
+            </Card>
+
+            {/* Success Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
@@ -85,15 +86,13 @@ const UpdatePrivacy = () => {
                 </Modal.Footer>
             </Modal>
 
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success mt-3" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
-        </Card>
+            {/* Alert Message */}
+            {alertMessage && (
+                <div className="alert alert-warning mt-3" role="alert">
+                    {alertMessage}
+                </div>
+            )}
+        </div>
     );
 };
 

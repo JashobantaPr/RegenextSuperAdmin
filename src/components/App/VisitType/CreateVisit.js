@@ -1,49 +1,53 @@
-import { formatDate } from "@fullcalendar/react";
 import React, { useState } from "react";
 import { Form, Button, Card, Modal, Alert } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../server";
 
 const CreateVisit = () => {
-    const [name, setName] = useState('');
-    const [showModal, setShowModal] = useState(false); // State to control modal visibility
-    const personal = sessionStorage.getItem("personalid");
-    const [showAlert, setShowAlert] = useState(false);
+    const [name, setName] = useState(''); // State to hold the VisitType name
+    const [showModal, setShowModal] = useState(false); // State for modal visibility
+    const [showAlert, setShowAlert] = useState(false); // State for alert visibility
     const navigate = useNavigate();
 
+    // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        
-        const raw = JSON.stringify({
-          
-          "visitType": name
-        });
-        
-        const requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: raw,
-          redirect: "follow"
-        };
-        fetch(API_URL+"addVisitType", requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-            console.log("result is ",result);
-            if(result.status === true){
-                setShowModal(true);
-            }
-            else{
-                setShowAlert(true);
-            }
-        })
-        .catch((error) => console.error(error));
+        createVisitType(); 
     };
 
+    // Function to make API request to add VisitType
+    const createVisitType = () => {
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = JSON.stringify({
+            "visitType": name // Sending visitType as a parameter in the request
+        });
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
+        };
+
+        // Fetch request to the API
+        fetch(API_URL + "addVisitType", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                if (result.status === true) {
+                    setShowModal(true); // Show success modal on success
+                } else {
+                    setShowAlert(true); // Show alert if the response is unsuccessful
+                }
+            })
+            .catch((error) => console.error("Error:", error)); // Error handling
+    };
+
+    // Handle closing of the modal and navigating to another page
     const handleCloseModal = () => {
         setShowModal(false);
-        navigate(`${process.env.PUBLIC_URL}/app/VisitType`);
+        navigate(`${process.env.PUBLIC_URL}/app/VisitType`); // Navigate to VisitType page
     };
 
     return (
@@ -54,9 +58,9 @@ const CreateVisit = () => {
                         <Form.Label>Add VisitType</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Enter name"
+                            placeholder="Enter visit type name"
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={(e) => setName(e.target.value)} // Update name value on change
                         />
                     </Form.Group>
                     <Button variant="primary mt-3" type="submit">
@@ -65,12 +69,12 @@ const CreateVisit = () => {
                 </Form>
             </Card>
 
-            {/* Modal to show success message */}
+            {/* Success Modal */}
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>VisitType Added Successfully</Modal.Body>
+                <Modal.Body>Visit Type Added Successfully</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Close
@@ -78,10 +82,10 @@ const CreateVisit = () => {
                 </Modal.Footer>
             </Modal>
 
-             {/* Alert to show success message */}
-             {showAlert && (
-                <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
-                   All parameters are required fields
+            {/* Alert for missing parameters */}
+            {showAlert && (
+                <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+                    All parameters are required fields
                 </Alert>
             )}
         </>

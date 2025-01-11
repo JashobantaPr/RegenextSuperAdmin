@@ -5,13 +5,12 @@ import { API_URL } from '../../../server';
 
 const UpdateGST = () => {
     const [alertMessage, setAlertMessage] = useState('');
-    const [Number, setName] = useState('');
+    const [gstRate, setGstRate] = useState('');
     const [showModal, setShowModal] = useState(false);
     const location = useLocation();
-    const iddata = location?.state;
-    console.log("iddata is", iddata);
+    const gstId = location?.state;
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         if (showModal) {
             setAlertMessage('');
@@ -20,60 +19,59 @@ const UpdateGST = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        UpdateGST(); 
+        updateGST();
     };
 
-    const UpdateGST = () => {
+    const updateGST = () => {
         const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append('Content-Type', 'application/json');
 
         const raw = JSON.stringify({
-            "GST_id": iddata,
-            "gstRate": Number
+            GST_id: gstId,
+            gstRate
         });
 
         const requestOptions = {
-            method: "POST",
+            method: 'POST',
             headers: myHeaders,
             body: raw,
-            redirect: "follow"
+            redirect: 'follow'
         };
 
-        fetch(API_URL+"updateAdminGST", requestOptions)
+        fetch(API_URL + 'updateAdminGST', requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if(result.Status == true){
-                    console.log("result is ", result);
-                   setShowModal(true);      
-                }  
-                else{
-                    setAlertMessage("Please Fill All The Fields");
-                }       
+                if (result.Status) {
+                    setShowModal(true);
+                } else {
+                    setAlertMessage('Please Fill All The Fields');
+                }
             })
             .catch((error) => console.error(error));
     };
-   
-   const navigateToProducts = () => {
-       navigate(`${process.env.PUBLIC_URL}/app/GSTManagement`);
-   };
+
+    const navigateToProducts = () => {
+        navigate(`${process.env.PUBLIC_URL}/app/GSTManagement`);
+    };
 
     return (
-        <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px", width: "500px" }}>
+        <Card className="update-gst-card">
             <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="Number">
+                <Form.Group controlId="gstRate">
                     <Form.Label>Update GST Rate</Form.Label>
                     <Form.Control
-                        type="Number"
+                        type="number"
                         placeholder="Enter GST Rate"
-                        value={Number}
-                        onChange={(e) => setName(e.target.value)}
+                        value={gstRate}
+                        onChange={(e) => setGstRate(e.target.value)}
                     />
                 </Form.Group>
-                <Button variant="primary mt-3" type="submit">
+                <Button variant="primary" type="submit" className="mt-3">
                     Submit
                 </Button>
             </Form>
-            {/* Modal for success message */}
+
+            {/* Success Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
@@ -86,14 +84,12 @@ const UpdateGST = () => {
                 </Modal.Footer>
             </Modal>
 
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success mt-3" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
+            {/* Alert Message */}
+            {alertMessage && (
+                <div className="alert alert-danger mt-3" role="alert">
+                    {alertMessage}
+                </div>
+            )}
         </Card>
     );
 };

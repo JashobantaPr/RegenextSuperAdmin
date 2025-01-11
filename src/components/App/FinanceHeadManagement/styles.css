@@ -1,48 +1,65 @@
+/* Center the pagination container */
 .pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-  }
-  
-  .pagination li {
-    margin: 0 5px;
-  }
-  
-  .pagination li a {
-    display: block;
-    padding: 5px 10px;
-    color: #333;
-    border: 1px solid #ccc;
-    text-decoration: none;
-  }
-  
-  .pagination li.active a {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-  }
-  
-  .pagination li.disabled a {
-    pointer-events: none;
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li.disabled a:hover {
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li:first-child a::before,
-  .pagination li:last-child a::after {
-    content: '';
-  }
-  
-  .pagination li:first-child a,
-  .pagination li:last-child a {
-    display: flex;
-    align-items: center;
-  }
-  
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin: 20px 0; /* Add margin to separate pagination from the content */
+}
+
+/* Space out each pagination item */
+.pagination li {
+  margin: 0 5px;
+}
+
+/* Style for each pagination link */
+.pagination li a {
+  display: block;
+  padding: 5px 10px;
+  color: #333;
+  border: 1px solid #ccc;
+  text-decoration: none;
+  border-radius: 5px; /* Add border-radius for rounded corners */
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Active page style */
+.pagination li.active a {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* Disabled page style */
+.pagination li.disabled a {
+  pointer-events: none;
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+/* Ensure no hover effect for disabled pages */
+.pagination li.disabled a:hover {
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+/* Remove unwanted extra borders on first and last pagination items */
+.pagination li:first-child a::before,
+.pagination li:last-child a::after {
+  content: '';
+}
+
+/* Align first and last pagination items */
+.pagination li:first-child a,
+.pagination li:last-child a {
+  display: flex;
+  align-items: center;
+}
+
+/* Hover effect for pagination links */
+.pagination li a:hover {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}

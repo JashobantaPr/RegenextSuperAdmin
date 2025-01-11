@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import './styles.css'
+import './styles.css';
 import { API_URL, IMG_PATH } from "../../../server";
 
 const TBMManagement = () => {
@@ -28,16 +28,13 @@ const TBMManagement = () => {
         fetch(API_URL + "getAllTBM", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if (result.status == true) {
-                    console.log("result is ", result);
+                if (result.status === true) {
                     setAlertMessage(result.message);
                     setTbmData(result.users);
-                    // Clear the alert after 3 seconds
                     setTimeout(() => {
                         setAlertMessage('');
                     }, 2000);
-                }
-                else {
+                } else {
                     setAlertMessage('Error fetching data from the API');
                 }
             })
@@ -45,16 +42,16 @@ const TBMManagement = () => {
     };
 
     const TBMRegistration = () => {
-        navigate(`${process.env.PUBLIC_URL}/app/TBMRegistration`, {});
+        navigate(`${process.env.PUBLIC_URL}/app/TBMRegistration`);
     };
-    const deleteTBM = (admin_id, tbm_id) => {
 
+    const deleteTBM = (admin_id, tbm_id) => {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
         const raw = JSON.stringify({
-            "admin_id": admin_id,
-            "tbm_id": tbm_id
+            admin_id,
+            tbm_id
         });
 
         const requestOptions = {
@@ -66,12 +63,11 @@ const TBMManagement = () => {
 
         fetch(API_URL + "deleteTBMUser", requestOptions)
             .then((response) => response.json())
-            .then((result) => {
-                console.log("deleteTBMUser", result);
-                getTbmUsers()
+            .then(() => {
+                getTbmUsers();
             })
             .catch((error) => console.error(error));
-    }
+    };
 
     const displayUsers = tbmData
         .slice(pagesVisited, pagesVisited + usersPerPage)
@@ -84,8 +80,26 @@ const TBMManagement = () => {
                 <td>{item.phoneNumber}</td>
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
-                <td><img src={IMG_PATH + item.image} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
-                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteTBM(item.admin_id, item._id)}>Delete</button></td>
+                <td>
+                    <img
+                        src={IMG_PATH + item.image}
+                        alt="user"
+                        style={{
+                            width: 30,
+                            height: 30,
+                            borderRadius: 5
+                        }}
+                    />
+                </td>
+                <td>
+                    <Button
+                        variant="danger"
+                        size="sm"
+                        onClick={() => deleteTBM(item.admin_id, item._id)}
+                    >
+                        Delete
+                    </Button>
+                </td>
             </tr>
         ));
 
@@ -103,10 +117,11 @@ const TBMManagement = () => {
                     onClick={TBMRegistration}
                     className="btn ripple btn-primary"
                 >
-                    <i className="fe fe-plus me-2"></i>TBM Registration
+                    <i className="fe fe-plus me-2"></i> TBM Registration
                 </Button>
             </div>
-            <table className="table table-striped" style={{ marginTop: "30px" }}>
+
+            <table className="table table-striped mt-4">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -124,28 +139,27 @@ const TBMManagement = () => {
                     {displayUsers}
                 </tbody>
             </table>
+
             <ReactPaginate
                 previousLabel={"<<"}
                 nextLabel={">>"}
                 pageCount={pageCount}
                 onPageChange={changePage}
-                containerClassName={"pagination justify-content-center"} // Center pagination
+                containerClassName={"pagination justify-content-center"}
                 previousLinkClassName={"page-link"}
                 nextLinkClassName={"page-link"}
                 disabledClassName={"page-item disabled"}
                 activeClassName={"page-item active"}
-                breakClassName={"page-item"} // Class for break elements (...)
+                breakClassName={"page-item"}
                 breakLinkClassName={"page-link"}
             />
 
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
+            {/* Display Alert Message */}
+            {alertMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    {alertMessage}
+                </div>
+            )}
         </div>
     );
 };

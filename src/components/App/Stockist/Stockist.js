@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Button, Table, Row, Col, Alert } from "react-bootstrap";
+import { Button, Table, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import "./styles.css";
 import { API_URL } from "../../../server";
+import "./styles.css";
 
 const Stockist = () => {
-    const [StockistData, setStockistData] = useState([]);
+    const [stockistData, setStockistData] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
     const usersPerPage = 5;
     const pagesVisited = pageNumber * usersPerPage;
     const navigate = useNavigate();
 
     useEffect(() => {
-        getStockist();
+        fetchStockistData();
     }, []);
 
-    const getStockist = () => {
+    const fetchStockistData = () => {
         const requestOptions = {
             method: "POST",
             body: new FormData(),
@@ -25,28 +25,24 @@ const Stockist = () => {
 
         fetch(API_URL + "getAllStockist", requestOptions)
             .then((response) => response.json())
-            .then((result) => {
-                console.log(result);
-                setStockistData(result.result);
-            })
-            .catch((error) => console.error(error));
+            .then((result) => setStockistData(result.result))
+            .catch((error) => console.error("Error fetching stockists:", error));
     };
 
-    const AddStockist = () => {
+    const handleAddStockist = () => {
         navigate(`${process.env.PUBLIC_URL}/app/AddStockist`);
     };
 
-    const UpdateStockist = (stockist) => {
-        console.log("Navigating with stockist:", stockist); // Debug
+    const handleUpdateStockist = (stockist) => {
         navigate(`${process.env.PUBLIC_URL}/app/UpdateStockist`, { state: { stockistData: stockist } });
     };
 
-    const deleterecord = (idid) => {
+    const handleDeleteStockist = (id) => {
         if (window.confirm("Are you sure you want to delete this stockist?")) {
             const myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
-            const raw = JSON.stringify({ id: idid });
+            const raw = JSON.stringify({ id });
 
             const requestOptions = {
                 method: "POST",
@@ -57,39 +53,39 @@ const Stockist = () => {
 
             fetch(API_URL + "deleteStockist", requestOptions)
                 .then((response) => response.json())
-                .then(() => {
-                    getStockist();
-                })
-                .catch((error) => console.error(error));
+                .then(() => fetchStockistData())
+                .catch((error) => console.error("Error deleting stockist:", error));
         }
     };
 
-    const displayUsers = StockistData.slice(pagesVisited, pagesVisited + usersPerPage).map((item) => (
-        <tr key={item._id}>
-            <td>{item.stockist}</td>
-            <td>{item.contanctNumber}</td>
-            <td>{item.address}</td>
-            <td>{item.stockistStatus}</td>
-            <td className="text-end">
-                <Button
-                    className="btn-sm btn-primary me-2"
-                    onClick={() => UpdateStockist(item)}
-                >
-                    Update
-                </Button>
-                <Button
-                    className="btn-sm btn-danger"
-                    onClick={() => deleterecord(item._id)}
-                >
-                    Delete
-                </Button>
-            </td>
-        </tr>
-    ));
+    const displayedStockists = stockistData
+        .slice(pagesVisited, pagesVisited + usersPerPage)
+        .map((item) => (
+            <tr key={item._id}>
+                <td>{item.stockist}</td>
+                <td>{item.contanctNumber}</td>
+                <td>{item.address}</td>
+                <td>{item.stockistStatus}</td>
+                <td className="text-end">
+                    <Button
+                        className="btn-sm btn-primary me-2"
+                        onClick={() => handleUpdateStockist(item)}
+                    >
+                        Update
+                    </Button>
+                    <Button
+                        className="btn-sm btn-danger"
+                        onClick={() => handleDeleteStockist(item._id)}
+                    >
+                        Delete
+                    </Button>
+                </td>
+            </tr>
+        ));
 
-    const pageCount = Math.ceil(StockistData.length / usersPerPage);
+    const pageCount = Math.ceil(stockistData.length / usersPerPage);
 
-    const changePage = ({ selected }) => {
+    const handlePageChange = ({ selected }) => {
         setPageNumber(selected);
     };
 
@@ -97,8 +93,8 @@ const Stockist = () => {
         <div className="container mt-4">
             <Row>
                 <Col className="text-end">
-                    <Button onClick={AddStockist} className="btn btn-primary">
-                        <i className="fe fe-plus me-2"></i>Add Stockist
+                    <Button onClick={handleAddStockist} className="btn btn-primary">
+                        <i className="fe fe-plus me-2"></i> Add Stockist
                     </Button>
                 </Col>
             </Row>
@@ -106,21 +102,21 @@ const Stockist = () => {
             <Table striped bordered hover responsive className="mt-4">
                 <thead>
                     <tr>
-                        <th style={{ color: "black" }}>Name</th>
-                        <th style={{ color: "black" }}>Contact Number</th>
-                        <th style={{ color: "black" }}>Address</th>
-                        <th style={{ color: "black" }}>Status</th>
-                        <th style={{ color: "black", textAlign: "end" }}>Actions</th>
+                        <th>Name</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                        <th className="text-end">Actions</th>
                     </tr>
                 </thead>
-                <tbody>{displayUsers}</tbody>
+                <tbody>{displayedStockists}</tbody>
             </Table>
 
             <ReactPaginate
                 previousLabel={"<<"}
                 nextLabel={">>"}
                 pageCount={pageCount}
-                onPageChange={changePage}
+                onPageChange={handlePageChange}
                 containerClassName={"pagination justify-content-center"}
                 previousLinkClassName={"page-link"}
                 nextLinkClassName={"page-link"}

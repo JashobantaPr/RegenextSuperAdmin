@@ -6,39 +6,40 @@ import { API_URL } from '../../../server';
 const UpdateMarketingMaterial = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [name, setName] = useState('');
-    const [file, setFile] = useState(null); // State to store the selected file
+    const [file, setFile] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const location = useLocation();
     const iddata = location?.state?._id; // Get the ID passed from the previous screen
     const navigate = useNavigate();
 
+    // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
         updateMarketingMaterial();
     };
 
+    // Update marketing material with API call
     const updateMarketingMaterial = () => {
         if (!name || !file) {
             setAlertMessage("Please provide all required fields.");
             return;
         }
 
-        const formdata = new FormData();
-        formdata.append("marketingMaterial_id", iddata);
-        formdata.append("marketingMaterial", name);
-        formdata.append("image", file); // Modified to match your provided snippet
+        const formData = new FormData();
+        formData.append("marketingMaterial_id", iddata);
+        formData.append("marketingMaterial", name);
+        formData.append("image", file);
 
         const requestOptions = {
             method: "POST",
-            body: formdata,
+            body: formData,
             redirect: "follow",
         };
 
-        // Change the API URL to the one you provided
-        fetch(API_URL +"updateMarketingMaterial", requestOptions)
-            .then((response) => response.text()) // Using text() instead of json() as per your example
+        fetch(API_URL + "updateMarketingMaterial", requestOptions)
+            .then((response) => response.text()) // Use text() as per your example
             .then((result) => {
-                console.log(result); // Logs the server response
+                console.log(result);
                 setShowModal(true); // Show modal on success
             })
             .catch((error) => {
@@ -47,10 +48,12 @@ const UpdateMarketingMaterial = () => {
             });
     };
 
+    // Handle file input change
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
     };
 
+    // Navigate to MarketingMaterial page
     const redirectToMarketingMaterial = () => {
         navigate(`${process.env.PUBLIC_URL}/app/MarketingMaterial`);
     };
@@ -75,12 +78,12 @@ const UpdateMarketingMaterial = () => {
                         accept="image/*"
                     />
                 </Form.Group>
-                <Button variant="primary mt-3" type="submit">
+                <Button variant="primary" type="submit" className="mt-3">
                     Submit
                 </Button>
             </Form>
 
-            {/* Modal for success message */}
+            {/* Success Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
@@ -93,7 +96,6 @@ const UpdateMarketingMaterial = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Display alert if alertMessage is not empty */}
             {alertMessage && (
                 <div className="alert alert-danger mt-3" role="alert">
                     {alertMessage}

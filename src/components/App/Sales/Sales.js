@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, Row } from "react-bootstrap";
+import { Button, Row, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import './styles.css'
+import './styles.css';
 import { API_URL, IMG_PATH } from "../../../server";
 
 const Sales = () => {
@@ -12,34 +12,31 @@ const Sales = () => {
     const pagesVisited = pageNumber * usersPerPage;
     const navigate = useNavigate();
 
+    // Fetch sales data on component mount
     useEffect(() => {
         getSales();
     }, []);
 
     const getSales = () => {
-        const raw = "";
-
         const requestOptions = {
             method: "POST",
-            body: raw,
+            body: "",
             redirect: "follow"
         };
 
         fetch(API_URL + "getAllSales", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                console.log(result)
-                setSalesData(result.users)
+                setSalesData(result.users);
             })
             .catch((error) => console.error(error));
     };
 
     const SalesRegistration = () => {
-        navigate(`${process.env.PUBLIC_URL}/app/SalesHeadRegistration`, {});
+        navigate(`${process.env.PUBLIC_URL}/app/SalesHeadRegistration`);
     };
 
     const deleteSH = (admin_id, SH_id) => {
-
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -59,10 +56,10 @@ const Sales = () => {
             .then((response) => response.json())
             .then((result) => {
                 console.log("deleteSHUser", result);
-                getSales()
+                getSales(); // Refresh sales data after deletion
             })
             .catch((error) => console.error(error));
-    }
+    };
 
     const displayUsers = SalesData
         .slice(pagesVisited, pagesVisited + usersPerPage)
@@ -75,8 +72,21 @@ const Sales = () => {
                 <td>{item.phoneNumber}</td>
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
-                <td><img src={IMG_PATH + item.profile_img} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
-                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteSH(item.admin_id, item._id)}>Delete</button></td>
+                <td>
+                    <img 
+                        src={IMG_PATH + item.profile_img} 
+                        alt="Profile" 
+                        style={{ width: 30, height: 30, borderRadius: 5 }} 
+                    />
+                </td>
+                <td>
+                    <button 
+                        className="btn btn-danger btn-sm" 
+                        onClick={() => deleteSH(item.admin_id, item._id)}
+                    >
+                        Delete
+                    </button>
+                </td>
             </tr>
         ));
 
@@ -88,16 +98,18 @@ const Sales = () => {
 
     return (
         <div>
-            <div className="left-content mt-4">
-                <Button
-                    style={{ marginLeft: "800px" }}
-                    onClick={SalesRegistration}
-                    className="btn ripple btn-primary"
+            {/* Sales Registration Button */}
+            <div className="text-end mt-4">
+                <Button 
+                    onClick={SalesRegistration} 
+                    className="btn btn-primary"
                 >
                     <i className="fe fe-plus me-2"></i>Sales Registration
                 </Button>
             </div>
-            <table className="table table-striped" style={{ marginTop: "30px" }}>
+
+            {/* Sales Data Table */}
+            <Table striped className="mt-4">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -114,7 +126,9 @@ const Sales = () => {
                 <tbody>
                     {displayUsers}
                 </tbody>
-            </table>
+            </Table>
+
+            {/* Pagination */}
             <ReactPaginate
                 previousLabel={"<<"}
                 nextLabel={">>"}

@@ -2,22 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import './styles.css'
+import './styles.css';
 import { API_URL, IMG_PATH } from "../../../server";
 
 const Finance = () => {
-    const [financeData, setfinanceData] = useState([]);
+    const [financeData, setFinanceData] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
     const [alertMessage, setAlertMessage] = useState('');
     const usersPerPage = 5;
     const pagesVisited = pageNumber * usersPerPage;
     const navigate = useNavigate();
 
+    // Fetch finance data on component mount
     useEffect(() => {
-        getfinance();
+        fetchFinanceData();
     }, []);
 
-    const getfinance = () => {
+    // Fetch finance data from API
+    const fetchFinanceData = () => {
         const formdata = new FormData();
         const requestOptions = {
             method: "POST",
@@ -26,38 +28,30 @@ const Finance = () => {
         };
 
         fetch(API_URL + "getAllfinanceHead", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                if (result.status == true) {
-                    console.log("result is ", result);
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === true) {
                     setAlertMessage(result.message);
-                    setfinanceData(result.users);
-                    // Clear the alert after 3 seconds
-                    setTimeout(() => {
-                        setAlertMessage('');
-                    }, 2000);
-                }
-                else {
+                    setFinanceData(result.users);
+                    setTimeout(() => setAlertMessage(''), 2000); // Clear alert after 2 seconds
+                } else {
                     setAlertMessage('Error fetching data from the API');
                 }
             })
-            .catch((error) => console.error(error));
+            .catch(error => console.error(error));
     };
 
+    // Navigate to Finance Head Registration page
     const financeRegistration = () => {
-        navigate(`${process.env.PUBLIC_URL}/app/FinanceHeadRegistration`, {});
+        navigate(`${process.env.PUBLIC_URL}/app/FinanceHeadRegistration`);
     };
 
-    const deleteFH = (admin_id, FH_id) => {
-
+    // Delete a finance head
+    const deleteFinanceHead = (admin_id, FH_id) => {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
-        const raw = JSON.stringify({
-            "admin_id": admin_id,
-            "FH_id": FH_id
-        });
-
+        const raw = JSON.stringify({ admin_id, FH_id });
         const requestOptions = {
             method: "POST",
             headers: myHeaders,
@@ -66,17 +60,15 @@ const Finance = () => {
         };
 
         fetch(API_URL + "deleteFHUser", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                console.log("deleteFHUser", result);
-                getfinance()
-            })
-            .catch((error) => console.error(error));
-    }
+            .then(response => response.json())
+            .then(() => fetchFinanceData()) // Refresh the data after deletion
+            .catch(error => console.error(error));
+    };
 
+    // Pagination logic
     const displayUsers = financeData
         .slice(pagesVisited, pagesVisited + usersPerPage)
-        .map((item) => (
+        .map(item => (
             <tr key={item._id}>
                 <td>{item.name}</td>
                 <td>{item.email}</td>
@@ -85,8 +77,8 @@ const Finance = () => {
                 <td>{item.phoneNumber}</td>
                 <td>{item.address}</td>
                 <td>{item.pincode}</td>
-                <td><img src={IMG_PATH + item.profile_img} style={{ width: 30, height: 30, borderRadius: 5 }} /></td>
-                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteFH(item.admin_id, item._id)}>Delete</button></td>
+                <td><img src={IMG_PATH + item.profile_img} style={{ width: 30, height: 30, borderRadius: 5 }} alt="Profile" /></td>
+                <td><button className="btn btn-danger btn btn-sm" onClick={() => deleteFinanceHead(item.admin_id, item._id)}>Delete</button></td>
             </tr>
         ));
 
@@ -97,17 +89,15 @@ const Finance = () => {
     };
 
     return (
-        <div>
-            <div className="left-content mt-4">
-                <Button
-                    style={{ marginLeft: "800px" }}
-                    onClick={financeRegistration}
-                    className="btn ripple btn-primary"
-                >
+        <div className="finance-container">
+            <div className="d-flex justify-content-end mt-4">
+                <Button onClick={financeRegistration} className="btn btn-primary">
                     <i className="fe fe-plus me-2"></i>Finance Registration
                 </Button>
             </div>
-            <table className="table table-striped" style={{ marginTop: "30px" }}>
+
+            {/* Finance Data Table */}
+            <table className="table table-striped mt-4">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -125,6 +115,8 @@ const Finance = () => {
                     {displayUsers}
                 </tbody>
             </table>
+
+            {/* Pagination */}
             <ReactPaginate
                 previousLabel={"<<"}
                 nextLabel={">>"}
@@ -139,14 +131,12 @@ const Finance = () => {
                 breakLinkClassName={"page-link"}
             />
 
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
+            {/* Alert Message */}
+            {alertMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    {alertMessage}
+                </div>
+            )}
         </div>
     );
 };

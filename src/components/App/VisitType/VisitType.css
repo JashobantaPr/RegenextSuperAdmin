@@ -1,3 +1,4 @@
+/* Pagination Styles */
 .pagination {
   display: flex;
   justify-content: center;
@@ -35,6 +36,7 @@
   border-color: #ccc;
 }
 
+/* First and last child styling, if needed for special symbols or content */
 .pagination li:first-child a::before,
 .pagination li:last-child a::after {
   content: '';
@@ -46,7 +48,55 @@
   align-items: center;
 }
 
+/* Button styles */
+.btn-danger.btn-sm {
+  margin-left: 40px; /* Corrected to add units */
+}
+/* Styles for pagination and table */
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
 
-.btn btn-danger btn btn-sm {
-  margin-left: 40;
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination li a {
+  display: block;
+  padding: 5px 10px;
+  color: #333;
+  border: 1px solid #ccc;
+  text-decoration: none;
+}
+
+.pagination li.active a {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pagination li.disabled a {
+  pointer-events: none;
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+.pagination li.disabled a:hover {
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+.pagination li:first-child a,
+.pagination li:last-child a {
+  display: flex;
+  align-items: center;
+}
+
+.left-content {
+  display: flex;
+  justify-content: flex-end;
 }

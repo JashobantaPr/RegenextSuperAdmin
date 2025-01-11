@@ -14,26 +14,27 @@ const AddMarketingMaterial = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // Validate that both name and file are provided
         if (!name || !file) {
             setShowAlert(true);
             return;
         }
 
-        const formdata = new FormData();
-        formdata.append("admin_id", personal);
-        formdata.append("marketingMaterial", name);
-        formdata.append("image", file);
+        // Create FormData for the file and other data
+        const formData = new FormData();
+        formData.append("admin_id", personal);
+        formData.append("marketingMaterial", name);
+        formData.append("image", file);
 
         const requestOptions = {
             method: "POST",
-            body: formdata,
+            body: formData,
             redirect: "follow",
         };
 
         fetch(API_URL + "addMarketingMaterial", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                console.log("result is", result);
                 if (result.status === true) {
                     setShowModal(true);
                 } else {
@@ -79,7 +80,7 @@ const AddMarketingMaterial = () => {
                 </Form>
             </Card>
 
-            {/* Modal to show success message */}
+            {/* Modal for success message */}
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
@@ -92,7 +93,7 @@ const AddMarketingMaterial = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Alert to show error message */}
+            {/* Error alert if validation fails */}
             {showAlert && (
                 <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
                     All fields, including an image, are required.

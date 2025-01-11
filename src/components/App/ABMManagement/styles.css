@@ -1,48 +1,72 @@
+/* Pagination container */
 .pagination {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-  }
-  
-  .pagination li {
-    margin: 0 5px;
-  }
-  
-  .pagination li a {
-    display: block;
-    padding: 5px 10px;
-    color: #333;
-    border: 1px solid #ccc;
-    text-decoration: none;
-  }
-  
-  .pagination li.active a {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
-  }
-  
-  .pagination li.disabled a {
-    pointer-events: none;
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li.disabled a:hover {
-    background-color: #eee;
-    color: #aaa;
-    border-color: #ccc;
-  }
-  
-  .pagination li:first-child a::before,
-  .pagination li:last-child a::after {
-    content: '';
-  }
-  
-  .pagination li:first-child a,
-  .pagination li:last-child a {
-    display: flex;
-    align-items: center;
-  }
-  
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 20px; /* Add margin at the bottom to give some space */
+}
+
+/* Pagination items */
+.pagination li {
+  margin: 0 5px;
+}
+
+/* Pagination link styles */
+.pagination li a {
+  display: block;
+  padding: 5px 15px; /* Adjusted for better spacing */
+  color: #333;
+  border: 1px solid #ccc;
+  text-decoration: none;
+  border-radius: 5px; /* Rounded corners */
+  font-weight: 500; /* Slightly bold text for better readability */
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Active state (currently selected page) */
+.pagination li.active a {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+/* Disabled state (non-clickable page) */
+.pagination li.disabled a {
+  pointer-events: none;
+  background-color: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+
+/* Hover state for pagination links */
+.pagination li a:hover {
+  background-color: #f1f1f1; /* Lighter background on hover */
+  border-color: #007bff; /* Highlight border on hover */
+}
+
+/* Disabled hover state */
+.pagination li.disabled a:hover {
+  background-color: #eee; /* Keeps the background unchanged */
+  color: #aaa; /* Keeps the text color unchanged */
+  border-color: #ccc; /* Keeps the border unchanged */
+}
+
+/* For the first and last pagination item (e.g., arrows) */
+.pagination li:first-child a::before,
+.pagination li:last-child a::after {
+  content: '';
+}
+
+/* First and last pagination items alignment */
+.pagination li:first-child a,
+.pagination li:last-child a {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Ensure the content is centered */
+}
+
+/* Optional: Add a hover effect for active states */
+.pagination li.active a:hover {
+  background-color: #0056b3; /* Slightly darker blue on hover */
+}

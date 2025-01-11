@@ -1,7 +1,8 @@
-
+/* General Container */
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 15px; /* Adds padding on both sides for better spacing on small screens */
 }
 
 /* Table Styling */
@@ -84,7 +85,7 @@
   border-color: #ddd;
 }
 
-/* Add Stockist Button */
+/* Add Stockist Button (Aligned to the Right) */
 .text-end .btn-primary {
   font-size: 16px;
   padding: 10px 20px;

@@ -66,11 +66,11 @@ export const MENUITEMS = [
         active:false,
         children: [
           {
-            path: `${process.env.PUBLIC_URL}/app/TBMManagement`,
+            path: `${process.env.PUBLIC_URL}/app/Zonal`,
             type: "link",
             active:false,
             selected:false,
-            title: "TBM'S Management",
+            title: "Zonal Head Management",
           },
           {
             path: `${process.env.PUBLIC_URL}/app/ABMManagement`,
@@ -80,11 +80,11 @@ export const MENUITEMS = [
             title: "ABM’S Management",
           },
           {
-            path: `${process.env.PUBLIC_URL}/app/Zonal`,
+            path: `${process.env.PUBLIC_URL}/app/TBMManagement`,
             type: "link",
             active:false,
             selected:false,
-            title: "Zonal Head Management",
+            title: "TBM'S Management",
           },
           {
             path: `${process.env.PUBLIC_URL}/app/Sales`,
@@ -168,7 +168,14 @@ export const MENUITEMS = [
             type: "link",
             active:false,
             selected:false,
-            title: "MarketingMaterial Management",
+            title: "Marketing Material Management",
+          },
+          {
+            path: `${process.env.PUBLIC_URL}/app/HelpAndSupport`,
+            type: "link",
+            active:false,
+            selected:false,
+            title: "Help And Support",
           },
           {
             path: `${process.env.PUBLIC_URL}/app/Privacy`,
@@ -182,15 +189,9 @@ export const MENUITEMS = [
             type: "link",
             active:false,
             selected:false,
-            title: "TermsAndConditions management",
+            title: "Terms And Conditions management",
           },
-          {
-            path: `${process.env.PUBLIC_URL}/app/HelpAndSupport`,
-            type: "link",
-            active:false,
-            selected:false,
-            title: "HelpAndSupport",
-          },
+          
 //         ],
 //       },
 //       {

@@ -1,116 +1,91 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Modal, Row } from "react-bootstrap"; // Import Modal
+import { Alert, Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import './styles.css'
-import { API_URL, IMG_PATH } from "../../../server";
+import './styles.css';
+import { API_URL } from "../../../server";
 
 const HelpAndSupport = () => {
     const [alertMessage, setAlertMessage] = useState('');
-    const [hasData, sethasData] = useState([]);
+    const [hasData, setHasData] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
-    const [recordToDelete, setRecordToDelete] = useState(null); // State to track record to delete
-    const [showModal, setShowModal] = useState(false); // State to control modal visibility
+    const [recordToDelete, setRecordToDelete] = useState(null); // Record to delete
+    const [showModal, setShowModal] = useState(false); // Modal visibility
     const usersPerPage = 5;
     const pagesVisited = pageNumber * usersPerPage;
     const navigate = useNavigate();
 
     useEffect(() => {
-        gethas();
+        fetchHelpAndSupportData(); // Fetch data when component mounts
     }, []);
 
-    const gethas = () => {
-        const formdata = new FormData();
+    const fetchHelpAndSupportData = () => {
         const requestOptions = {
             method: "POST",
-            body: formdata,
+            body: new FormData(), // Body for fetching data
             redirect: "follow"
         };
 
-        fetch(API_URL + "getAllHelpAndSupport", requestOptions)
+        fetch(`${API_URL}getAllHelpAndSupport`, requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if(result.Status == true){
-                    console.log("result is ", result);
-                    sethasData(result.HelpAndSupportdata);
+                if (result.Status) {
+                    setHasData(result.HelpAndSupportdata);
                     setAlertMessage(result.message);
-                    // Clear the alert after 3 seconds
-                    setTimeout(() => {
-                        setAlertMessage('');
-                    }, 2000);
-                }
-                else{
+                    clearAlertMessage(); // Clear alert message after 2 seconds
+                } else {
                     setAlertMessage('Error fetching data from the API');
                 }
             })
             .catch((error) => console.error(error));
     };
 
-    const addproduct = () => {
-        navigate(`${process.env.PUBLIC_URL}/app/CreateHelpAndSupport`, {});
+    const clearAlertMessage = () => {
+        setTimeout(() => setAlertMessage(''), 2000);
     };
 
-    const navup = (idid) => {
-        navigate(`${process.env.PUBLIC_URL}/app/UpdateHelpAndSupport`, {
-            state: idid
-        })
-    }
+    const handleAddProduct = () => {
+        navigate(`${process.env.PUBLIC_URL}/app/CreateHelpAndSupport`);
+    };
 
-    const deleterecord = (idid) => {
-        setRecordToDelete(idid); // Set the ID of the record to delete
-        setShowModal(true); // Show the confirmation modal
-    }
+    const handleUpdate = (id) => {
+        navigate(`${process.env.PUBLIC_URL}/app/UpdateHelpAndSupport`, { state: id });
+    };
+
+    const handleDelete = (id) => {
+        setRecordToDelete(id); // Set the ID of the record to delete
+        setShowModal(true); // Show confirmation modal
+    };
 
     const deleteConfirmed = () => {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        const raw = JSON.stringify({
-            "id": recordToDelete
-        });
-
         const requestOptions = {
             method: "POST",
-            headers: myHeaders,
-            body: raw,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: recordToDelete }),
             redirect: "follow"
         };
-        fetch(API_URL + "deleteHelpAndSupport", requestOptions)
+
+        fetch(`${API_URL}deleteHelpAndSupport`, requestOptions)
             .then((response) => response.json())
-            .then((result) => {
-                gethas();
-                console.log("result is", result)
+            .then(() => {
+                fetchHelpAndSupportData(); // Refresh data after deletion
+                setShowModal(false); // Close modal
             })
             .catch((error) => console.error(error));
-
-        setShowModal(false); // Hide the modal after deletion
-    }
+    };
 
     const handleCloseModal = () => {
         setShowModal(false); // Close the modal
-    }
+    };
 
-    const displayUsers = hasData
+    const displayData = hasData
         .slice(pagesVisited, pagesVisited + usersPerPage)
         .map((item) => (
             <tr key={item._id}>
                 <td>{item.HelpAndSupport}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
                 <td>
-                    <Button onClick={() => deleterecord(item._id)}>Delete</Button>
-                    <Button onClick={() => navup(item._id)} className="ms-3">Update</Button>
+                    <Button onClick={() => handleDelete(item._id)}>Delete</Button>
+                    <Button onClick={() => handleUpdate(item._id)} className="ms-3">Update</Button>
                 </td>
             </tr>
         ));
@@ -118,7 +93,7 @@ const HelpAndSupport = () => {
     const pageCount = Math.ceil(hasData.length / usersPerPage);
 
     const changePage = ({ selected }) => {
-        setPageNumber(selected);
+        setPageNumber(selected); // Change page
     };
 
     return (
@@ -126,36 +101,24 @@ const HelpAndSupport = () => {
             <div className="left-content mt-4">
                 <Button
                     style={{ marginLeft: "750px" }}
-                    onClick={addproduct}
+                    onClick={handleAddProduct}
                     className="btn ripple btn-primary"
                 >
                     <i className="fe fe-plus me-2"></i>Add HelpAndSupport
                 </Button>
             </div>
+
             <table className="table table-striped" style={{ marginTop: "30px" }}>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th style={{ marginLeft: "10px" }}>Action</th>
+                        <th>Help And Support</th>
+                        <th style={{ textAlign: "center" }}>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {displayUsers}
-                </tbody>
+                <tbody>{displayData}</tbody>
             </table>
+
+            {/* Pagination */}
             <ReactPaginate
                 previousLabel={"<<"}
                 nextLabel={">>"}
@@ -169,30 +132,25 @@ const HelpAndSupport = () => {
                 breakClassName={"page-item"} // Class for break elements (...)
                 breakLinkClassName={"page-link"}
             />
-            {/* Confirmation Modal */}
+
+            {/* Modal for delete confirmation */}
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirmation</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Are you sure you want to delete the record?</Modal.Body>
+                <Modal.Body>Are you sure you want to delete this record?</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Cancel
-                    </Button>
-                    <Button variant="primary" onClick={deleteConfirmed}>
-                        Delete
-                    </Button>
+                    <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>
+                    <Button variant="primary" onClick={deleteConfirmed}>Delete</Button>
                 </Modal.Footer>
             </Modal>
 
-            <div>
-          {/* Display alert if alertMessage is not empty */}
-          {alertMessage && (
-            <div className="alert alert-success" role="alert">
-              {alertMessage}
-            </div>
-          )}
-        </div>
+            {/* Alert message */}
+            {alertMessage && (
+                <Alert variant="success" dismissible onClose={() => setAlertMessage('')}>
+                    {alertMessage}
+                </Alert>
+            )}
         </div>
     );
 };

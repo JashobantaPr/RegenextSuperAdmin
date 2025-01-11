@@ -1,6 +1,5 @@
-import { formatDate } from "@fullcalendar/react";
-import React, { useState } from "react";
-import { Form, Button, Card, Modal} from "react-bootstrap";
+import { useState } from "react";
+import { Form, Button, Card, Modal } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../../../server";
 
@@ -13,10 +12,12 @@ const ClinicalProfileCreate = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
     const [pincode, setPincode] = useState('');
-    const [image, setImage] = useState(null); // Initialize image state as null
+    const [image, setImage] = useState(null);
+
     const location = useLocation();
     const totaldata = location?.state;
     const navigate = useNavigate();
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -28,7 +29,7 @@ const ClinicalProfileCreate = () => {
         formData.append("phoneNumber", phoneNumber);
         formData.append("address", address);
         formData.append("pincode", pincode);
-        formData.append("image", image); // Append the image file directly
+        formData.append("image", image);
 
         const requestOptions = {
             method: "POST",
@@ -40,7 +41,6 @@ const ClinicalProfileCreate = () => {
             .then((response) => response.json())
             .then((result) => {
                 if (result.Status === true) {
-                    console.log("result is", result)
                     setData(result);
                     setShowModal(true);
                 } else {
@@ -51,7 +51,6 @@ const ClinicalProfileCreate = () => {
     };
 
     const handleFileChange = (e) => {
-        // Update the image state when a file is selected
         setImage(e.target.files[0]);
     };
 
@@ -61,9 +60,9 @@ const ClinicalProfileCreate = () => {
     };
 
     return (
-        <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px" }}>
+        <Card style={{ marginTop: "20px", padding: "20px", maxWidth: "800px", marginLeft: "auto", marginRight: "auto" }}>
             <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="name">
+                <Form.Group controlId="name">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                         type="text"
@@ -72,6 +71,7 @@ const ClinicalProfileCreate = () => {
                         onChange={(e) => setName(e.target.value)}
                     />
                 </Form.Group>
+
                 <Form.Group controlId="mobileNumber">
                     <Form.Label>Mobile Number</Form.Label>
                     <Form.Control
@@ -81,6 +81,7 @@ const ClinicalProfileCreate = () => {
                         onChange={(e) => setMobileNumber(e.target.value)}
                     />
                 </Form.Group>
+
                 <Form.Group controlId="phoneNumber">
                     <Form.Label>Phone Number</Form.Label>
                     <Form.Control
@@ -90,6 +91,7 @@ const ClinicalProfileCreate = () => {
                         onChange={(e) => setPhoneNumber(e.target.value)}
                     />
                 </Form.Group>
+
                 <Form.Group controlId="address">
                     <Form.Label>Address</Form.Label>
                     <Form.Control
@@ -99,6 +101,7 @@ const ClinicalProfileCreate = () => {
                         onChange={(e) => setAddress(e.target.value)}
                     />
                 </Form.Group>
+
                 <Form.Group controlId="pincode">
                     <Form.Label>Pincode</Form.Label>
                     <Form.Control
@@ -108,28 +111,30 @@ const ClinicalProfileCreate = () => {
                         onChange={(e) => setPincode(e.target.value)}
                     />
                 </Form.Group>
+
                 <Form.Group controlId="image">
                     <Form.Label>Image</Form.Label>
                     <Form.Control type="file" onChange={handleFileChange} />
                 </Form.Group>
-                <Button variant="primary mt-3" type="submit">
+
+                <Button variant="primary" type="submit" className="mt-3 w-100">
                     Submit
                 </Button>
             </Form>
 
             {/* Display alert if alertMessage is not empty */}
             {alertMessage && (
-                <div className="alert alert-success" role="alert" style={{ marginTop: "20px" }}>
+                <div className="alert alert-danger mt-3" role="alert">
                     {alertMessage}
                 </div>
             )}
 
             {/* Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
-                <Modal.Title style={{ textAlign: "center", marginTop: "20px", marginBottom: "20px" }}>
-                    {data ? data.message : ""}
-                </Modal.Title>
-                <Modal.Footer>
+                <Modal.Body style={{ textAlign: "center" }}>
+                    <h4>{data ? data.message : ""}</h4>
+                </Modal.Body>
+                <Modal.Footer style={{ justifyContent: "center" }}>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         OK
                     </Button>

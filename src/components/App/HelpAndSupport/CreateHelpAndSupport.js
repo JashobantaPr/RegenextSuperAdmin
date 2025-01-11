@@ -1,45 +1,56 @@
-import { formatDate } from "@fullcalendar/react";
 import React, { useState } from "react";
 import { Form, Button, Card, Modal, Alert } from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../server";
 
 const CreateHelpAndSupport = () => {
-    const [name, setName] = useState('');
-    const [showModal, setShowModal] = useState(false); // State to control modal visibility
-    const personal = sessionStorage.getItem("personalid");
-    const [showAlert, setShowAlert] = useState(false);
-    const navigate = useNavigate();
+    const [name, setName] = useState(''); // State for product name
+    const [showModal, setShowModal] = useState(false); // Controls visibility of the success modal
+    const [showAlert, setShowAlert] = useState(false); // Controls visibility of the alert
+    const navigate = useNavigate(); // Navigate after success
 
+    // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (!name) {
+            setShowAlert(true); // Show alert if the name is empty
+            return;
+        }
+
+        // Prepare the request
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-        
+
         const raw = JSON.stringify({
-          "HelpAndSupport": name
+            "HelpAndSupport": name
         });
-        
+
         const requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: raw,
-          redirect: "follow"
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
         };
-        fetch(API_URL+"HelpAndSupport", requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-            console.log("result is ",result);
-            if(result.status === true){
-                setShowModal(true);
-            }
-            else{
-                setShowAlert(true);
-            }
-        })
-        .catch((error) => console.error(error));
+
+        // Send the request to the API
+        fetch(`${API_URL}HelpAndSupport`, requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                console.log("result is ", result);
+                if (result.status === true) {
+                    setShowModal(true); // Show modal on success
+                } else {
+                    setShowAlert(true); // Show alert on failure
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                setShowAlert(true); // Show alert if there's an error
+            });
     };
 
+    // Handle modal close and navigate to another page
     const handleCloseModal = () => {
         setShowModal(false);
         navigate(`${process.env.PUBLIC_URL}/app/HelpAndSupport`);
@@ -47,10 +58,13 @@ const CreateHelpAndSupport = () => {
 
     return (
         <>
-            <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px", width: "500px" }}>
+            {/* Card for the form */}
+            <Card 
+                style={{ marginTop: "10px", marginLeft: "100px", padding: "20px", width: "500px" }}
+            >
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="name">
-                        <Form.Label>Add Product</Form.Label>
+                        <Form.Label>Add Help and Support</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Enter name"
@@ -69,7 +83,9 @@ const CreateHelpAndSupport = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>HelpAndSupport Added Successfully</Modal.Body>
+                <Modal.Body>
+                    HelpAndSupport added successfully!
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Close
@@ -77,10 +93,10 @@ const CreateHelpAndSupport = () => {
                 </Modal.Footer>
             </Modal>
 
-             {/* Alert to show success message */}
-             {showAlert && (
-                <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
-                   All parameters are required fields
+            {/* Alert to show error message */}
+            {showAlert && (
+                <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+                    All fields are required.
                 </Alert>
             )}
         </>

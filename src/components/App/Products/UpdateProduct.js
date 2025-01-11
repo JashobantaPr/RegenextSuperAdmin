@@ -9,9 +9,8 @@ const UpdateProduct = () => {
     const [showModal, setShowModal] = useState(false);
     const location = useLocation();
     const iddata = location?.state;
-    console.log("iddata is", iddata);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         if (showModal) {
             setAlertMessage('');
@@ -20,12 +19,12 @@ const UpdateProduct = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        updateProduct(); 
+        updateProduct();
     };
 
     const updateProduct = () => {
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
 
         const raw = JSON.stringify({
             "product_id": iddata,
@@ -34,46 +33,45 @@ const UpdateProduct = () => {
 
         const requestOptions = {
             method: "POST",
-            headers: myHeaders,
+            headers: headers,
             body: raw,
             redirect: "follow"
         };
 
-        fetch(API_URL+"updateProductType", requestOptions)
+        fetch(API_URL + "updateProductType", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                if(result.Status === true){
-                    console.log("result is ", result);
-                   setShowModal(true);      
-                }  
-                else{
+                if (result.Status === true) {
+                    setShowModal(true);
+                } else {
                     setAlertMessage("Please Fill All The Fields");
-                }       
+                }
             })
             .catch((error) => console.error(error));
     };
-   
-   const navigateToProducts = () => {
-       navigate(`${process.env.PUBLIC_URL}/app/Products`);
-   };
+
+    const navigateToProducts = () => {
+        navigate(`${process.env.PUBLIC_URL}/app/Products`);
+    };
 
     return (
-        <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px", width: "500px" }}>
+        <Card style={{ marginTop: "30px", padding: "20px", maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}>
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="name">
                     <Form.Label>Update Product Name</Form.Label>
                     <Form.Control
                         type="text"
-                        placeholder="Enter name"
+                        placeholder="Enter product name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                 </Form.Group>
-                <Button variant="primary mt-3" type="submit">
+                <Button variant="primary mt-3" type="submit" className="w-100">
                     Submit
                 </Button>
             </Form>
-            {/* Modal for success message */}
+
+            {/* Success Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
@@ -86,14 +84,12 @@ const UpdateProduct = () => {
                 </Modal.Footer>
             </Modal>
 
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success mt-3" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
+            {/* Alert Message */}
+            {alertMessage && (
+                <div className="alert alert-danger mt-3" role="alert">
+                    {alertMessage}
+                </div>
+            )}
         </Card>
     );
 };

@@ -4,58 +4,64 @@ import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../../server";
 
 const AddProduct = () => {
-    const [name, setName] = useState('');
-    const [showModal, setShowModal] = useState(false); // State to control modal visibility
-    const personal = sessionStorage.getItem("personalid");
-    const [showAlert, setShowAlert] = useState(false);
-    const navigate = useNavigate();
+    const [name, setName] = useState(''); // Product name
+    const [showModal, setShowModal] = useState(false); // Modal visibility state
+    const [showAlert, setShowAlert] = useState(false); // Alert visibility state
+    const personal = sessionStorage.getItem("personalid"); // Get personal ID from session
+    const navigate = useNavigate(); // For navigation after success
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Create headers for the request
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         
+        // Prepare the data to send in the request
         const raw = JSON.stringify({
-          "admin_id": personal,
-          "productType": name
+            "admin_id": personal,
+            "productType": name
         });
-        
+
+        // Request options
         const requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: raw,
-          redirect: "follow"
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
         };
-        fetch(API_URL+"addProductType", requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-            console.log("result is ",result);
-            if(result.status === true){
-                setShowModal(true);
-            }
-            else{
-                setShowAlert(true);
-            }
-        })
-        .catch((error) => console.error(error));
+
+        // Sending request to the server
+        fetch(API_URL + "addProductType", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                if (result.status === true) {
+                    setShowModal(true); // Show success modal
+                } else {
+                    setShowAlert(true); // Show alert for missing parameters
+                }
+            })
+            .catch((error) => console.error("Error:", error));
     };
 
     const handleCloseModal = () => {
-        setShowModal(false);
-        navigate(`${process.env.PUBLIC_URL}/app/Products`);
+        setShowModal(false); // Close the modal
+        navigate(`${process.env.PUBLIC_URL}/app/Products`); // Navigate to products page
     };
 
     return (
         <>
-            <Card style={{ marginTop: "10px", marginLeft: "100px", padding: "20px", width: "500px" }}>
+            {/* Card for the form */}
+            <Card style={{ marginTop: "10px", padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="name">
                         <Form.Label>Add Product</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Enter name"
+                            placeholder="Enter product name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            required
                         />
                     </Form.Group>
                     <Button variant="primary mt-3" type="submit">
@@ -64,12 +70,12 @@ const AddProduct = () => {
                 </Form>
             </Card>
 
-            {/* Modal to show success message */}
+            {/* Modal for success message */}
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Success</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Product Added Successfully</Modal.Body>
+                <Modal.Body>Product added successfully!</Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Close
@@ -77,10 +83,10 @@ const AddProduct = () => {
                 </Modal.Footer>
             </Modal>
 
-             {/* Alert to show success message */}
-             {showAlert && (
-                <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
-                   All parameters are required fields
+            {/* Alert for missing parameters */}
+            {showAlert && (
+                <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+                    All fields are required.
                 </Alert>
             )}
         </>

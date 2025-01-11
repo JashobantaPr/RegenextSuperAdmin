@@ -13,18 +13,18 @@ function FinanceHeadRegistration() {
     const location = useLocation();
 
     const personal = sessionStorage.getItem("personalid");
-    console.log("personal id", personal);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
         const raw = JSON.stringify({
-            "admin_id": personal,
-            "email": email,
-            "password": password,
-            "token": "fgfdwwhjjh"
+            admin_id: personal,
+            email: email,
+            password: password,
+            token: "fgfdwwhjjh"
         });
 
         const requestOptions = {
@@ -34,21 +34,21 @@ function FinanceHeadRegistration() {
             redirect: "follow"
         };
 
-        fetch(API_URL + "financeHeadRegistration", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                if (result.Status == true) {
-                    console.log("result is Finance Registration ", result);
-                    setData(result);
-                    setShowModal(true);
-                } else {
-                    setAlertMessage("Please provide all required fields");
-                }
-            })
-            .catch((error) => console.error(error));
+        try {
+            const response = await fetch(API_URL + "financeHeadRegistration", requestOptions);
+            const result = await response.json();
+            if (result.Status === true) {
+                setData(result);
+                setShowModal(true);
+            } else {
+                setAlertMessage("Please provide all required fields");
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
-    const registration = () => {
+    const handleRegistration = () => {
         navigate(`${process.env.PUBLIC_URL}/app/FinanceHeadProfileCreate`, {
             state: data
         });
@@ -58,34 +58,49 @@ function FinanceHeadRegistration() {
         <div className="container mt-5">
             <div className="card w-50 mx-auto">
                 <div className="card-body">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <h5 className="card-title">Email</h5>
                         <div className="mb-3">
-                            <input type="email" className="form-control" placeholder="Enter Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                            <input 
+                                type="email" 
+                                className="form-control" 
+                                placeholder="Enter Email" 
+                                value={email} 
+                                onChange={(e) => setEmail(e.target.value)} 
+                                required 
+                            />
                         </div>
                         <h5 className="card-title">Password</h5>
                         <div className="mb-3">
-                            <input type="password" className="form-control" placeholder="Enter Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                            <input 
+                                type="password" 
+                                className="form-control" 
+                                placeholder="Enter Password" 
+                                value={password} 
+                                onChange={(e) => setPassword(e.target.value)} 
+                                required 
+                            />
                         </div>
-                        <button onClick={(e) => handleSubmit(e)} type="submit" className="btn btn-primary">Submit</button>
+                        <button type="submit" className="btn btn-primary">
+                            Submit
+                        </button>
                     </form>
                 </div>
             </div>
 
-            <div>
-                {/* Display alert if alertMessage is not empty */}
-                {alertMessage && (
-                    <div className="alert alert-success" role="alert">
-                        {alertMessage}
-                    </div>
-                )}
-            </div>
+            {alertMessage && (
+                <div className="alert alert-danger mt-3" role="alert">
+                    {alertMessage}
+                </div>
+            )}
 
             {data && (
                 <Modal show={showModal} onHide={() => setShowModal(false)}>
-                    <Modal.Title style={{textAlign:"center",marginTop:"20px",marginBottom:"20px"}}>{data.message}</Modal.Title>
+                    <Modal.Body style={{ textAlign: "center", padding: "20px" }}>
+                        {data.message}
+                    </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={() => { setShowModal(false); registration(); }}>
+                        <Button variant="secondary" onClick={() => { setShowModal(false); handleRegistration(); }}>
                             OK
                         </Button>
                     </Modal.Footer>
