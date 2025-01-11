@@ -1,0 +1,109 @@
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Table Styling */
+.table {
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+  background-color: #007bff;
+  color: #ffffff;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Button Styling */
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+  background-color: #a71d2a;
+}
+
+/* Pagination Styling */
+.pagination {
+  margin-top: 20px;
+}
+
+.pagination .page-item .page-link {
+  color: #007bff;
+  font-size: 14px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+}
+
+.pagination .page-item .page-link:hover {
+  background-color: #e9ecef;
+  border-color: #ddd;
+}
+
+/* Add Stockist Button */
+.text-end .btn-primary {
+  font-size: 16px;
+  padding: 10px 20px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .table {
+    font-size: 14px;
+  }
+
+  .btn-primary,
+  .btn-danger {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .pagination .page-item .page-link {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+}
