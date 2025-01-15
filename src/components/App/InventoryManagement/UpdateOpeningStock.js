@@ -103,7 +103,7 @@ const UpdateInventory = () => {
         fetch(API_URL+"updateOpeningStock", requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log("API Response:", result);  // Log the response from the API
+                console.log("API Response:", result);
                 if (result.Status === true) {
                     console.log("Update successful:", result);
                     setShowModal(true);
