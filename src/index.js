@@ -13,9 +13,9 @@ import UpdateMarketingMaterial from "./components/App/MarketingMaterial/UpdateMa
 import GSTManagement from "./components/App/GSTManagement/GSTManagement.js";
 import AddGST from "./components/App/GSTManagement/AddGST.js";
 import UpdateGST from "./components/App/GSTManagement/UpdateGST.js";
-import Inventory from "./components/App/InventoryManagement/Inventory.js";
-import AddInventory from "./components/App/InventoryManagement/AddInventory.js";
-import UpdateInventory from "./components/App/InventoryManagement/UpdateInventory.js";
+import Inventory from "./components/App/InventoryManagement/OpeningStock.js";
+import AddOpeningStock from "./components/App/InventoryManagement/AddOpeningStock.js";
+import UpdateInventory from "./components/App/InventoryManagement/UpdateOpeningStock.js";
 import AreaInfo from "./components/App/ABMManagement/AreaInfo.js";
 import ZHAreaInfo from "./components/App/Zonal/ZHAreaInfo.js";
 import AddTarget from "./components/App/TargetManagement/addFinanceTarget.js";
@@ -609,11 +609,11 @@ root.render(
                 element={<Inventory />}
               />
               <Route
-                path={`${process.env.PUBLIC_URL}/app/AddInventory`}
-                element={<AddInventory />}
+                path={`${process.env.PUBLIC_URL}/app/AddOpeningStock`}
+                element={<AddOpeningStock />}
               />
               <Route
-                path={`${process.env.PUBLIC_URL}/app/UpdateInventory`}
+                path={`${process.env.PUBLIC_URL}/app/UpdateOpeningStock`}
                 element={<UpdateInventory />}
               />
               <Route

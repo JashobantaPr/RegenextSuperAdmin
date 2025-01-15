@@ -140,7 +140,7 @@ export const MENUITEMS = [
             type: "link",
             active:false,
             selected:false,
-            title: "GST  Management",
+            title: "GST Management",
           },
           {
             path: `${process.env.PUBLIC_URL}/app/VisitType`,
@@ -161,7 +161,7 @@ export const MENUITEMS = [
             type: "link",
             active:false,
             selected:false,
-            title: "Inventory Management",
+            title: "Opening Stock Management",
           },
           {
             path: `${process.env.PUBLIC_URL}/app/MarketingMaterial`,
