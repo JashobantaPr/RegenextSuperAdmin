@@ -18,7 +18,7 @@ const SignIn = () => {
   }
   let navigate = useNavigate(); 
   const routeChange = () =>{ 
-    let path = `${process.env.PUBLIC_URL}/app/TBMManagement/`; 
+    let path = `${process.env.PUBLIC_URL}/app/Zonal/`; 
     navigate(path);
   }
 

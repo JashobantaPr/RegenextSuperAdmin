@@ -124,7 +124,7 @@ const GSTManagement = () => {
             <table className="table table-striped mt-3">
                 <thead>
                     <tr>
-                        <th>GST Rate</th>
+                        <th>GST Rate in %</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
